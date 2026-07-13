@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="sw">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -18,8 +18,6 @@
       --bg:      #05070f;
       --surface: rgba(255,255,255,0.03);
       --border:  rgba(255,255,255,0.07);
-
-      /* Responsive spacing */
       --gap-sm: 8px;
       --gap-md: 16px;
       --gap-lg: 24px;
@@ -40,7 +38,6 @@
       padding-bottom: calc(72px + env(safe-area-inset-bottom));
     }
 
-    /* ── Grain overlay ── */
     body::before {
       content: '';
       position: fixed;
@@ -51,9 +48,6 @@
       opacity: 0.4;
     }
 
-    /* ══════════════════════════════════════════
-       TOP BAR
-    ══════════════════════════════════════════ */
     .topbar {
       display: flex;
       justify-content: space-between;
@@ -78,115 +72,63 @@
       background-clip: text;
     }
     .topbar-left p { font-size: clamp(8px, 1.8vw, 10px); opacity: .4; letter-spacing: 0.1em; margin-top: 2px; }
+    .topbar-right { display: flex; align-items: center; gap: 8px; }
 
-    .topbar-right {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    /* Removed .live-badge "LIVE" match status as requested */
-
-    /* ── Notification Bell ── */
     .notif-bell {
       position: relative;
-      width: 38px;
-      height: 38px;
+      width: 38px; height: 38px;
       background: rgba(255,255,255,0.05);
       border: 1px solid rgba(255,255,255,0.1);
       border-radius: 10px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      font-size: 16px;
-      transition: all .2s;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; font-size: 16px; transition: all .2s;
       -webkit-tap-highlight-color: transparent;
     }
     .notif-bell:hover, .notif-bell:active { background: rgba(255,255,255,0.1); transform: translateY(-1px); }
     .notif-count {
-      position: absolute;
-      top: -5px;
-      right: -5px;
-      background: var(--red);
-      color: white;
-      font-size: 9px;
-      font-weight: 800;
-      width: 16px;
-      height: 16px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border: 1.5px solid var(--bg);
-      animation: notif-pop .3s ease;
+      position: absolute; top: -5px; right: -5px;
+      background: var(--red); color: white;
+      font-size: 9px; font-weight: 800; width: 16px; height: 16px;
+      border-radius: 50%; display: flex; align-items: center; justify-content: center;
+      border: 1.5px solid var(--bg); animation: notif-pop .3s ease;
     }
     .notif-count.hidden { display: none; }
 
-    /* ── Notification Panel ── */
     .notif-panel {
-      position: fixed;
-      top: 68px;
-      right: 12px;
+      position: fixed; top: 68px; right: 12px;
       width: min(300px, calc(100vw - 24px));
-      background: #0d1120;
-      border: 1px solid rgba(245,200,66,0.2);
-      border-radius: var(--radius);
-      z-index: 999;
-      overflow: hidden;
+      background: #0d1120; border: 1px solid rgba(245,200,66,0.2);
+      border-radius: var(--radius); z-index: 999; overflow: hidden;
       box-shadow: 0 20px 60px rgba(0,0,0,.8);
-      transform-origin: top right;
-      transform: scale(0.9);
-      opacity: 0;
-      pointer-events: none;
+      transform-origin: top right; transform: scale(0.9); opacity: 0; pointer-events: none;
       transition: all .2s cubic-bezier(.34,1.56,.64,1);
     }
     .notif-panel.open { transform: scale(1); opacity: 1; pointer-events: all; }
     .notif-panel-header {
-      padding: 14px 16px;
-      border-bottom: 1px solid rgba(255,255,255,0.06);
-      font-size: 12px;
-      font-weight: 700;
-      letter-spacing: 0.1em;
-      color: var(--gold);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+      padding: 14px 16px; border-bottom: 1px solid rgba(255,255,255,0.06);
+      font-size: 12px; font-weight: 700; letter-spacing: 0.1em; color: var(--gold);
+      display: flex; justify-content: space-between; align-items: center;
     }
     .notif-clear { font-size: 10px; color: rgba(255,255,255,.3); cursor: pointer; }
     .notif-clear:hover { color: var(--red); }
     .notif-item {
-      padding: 12px 16px;
-      border-bottom: 1px solid rgba(255,255,255,0.04);
-      text-align: left;
-      font-size: 12px;
-      opacity: 0.8;
-      animation: slideIn .3s ease;
+      padding: 12px 16px; border-bottom: 1px solid rgba(255,255,255,0.04);
+      text-align: left; font-size: 12px; opacity: 0.8; animation: slideIn .3s ease;
     }
     .notif-item:last-child { border-bottom: none; }
     .notif-empty { padding: 20px; font-size: 12px; opacity: .4; }
 
-    /* ══════════════════════════════════════════
-       SOCIAL PROOF BAR
-    ══════════════════════════════════════════ */
     .social-bar {
-      display: flex;
-      justify-content: center;
-      background: rgba(0,0,0,0.3);
-      border-bottom: 1px solid rgba(255,255,255,0.04);
+      display: flex; justify-content: center;
+      background: rgba(0,0,0,0.3); border-bottom: 1px solid rgba(255,255,255,0.04);
       overflow: hidden;
     }
     .social-item {
-      flex: 1;
-      padding: 8px 4px;
+      flex: 1; padding: 8px 4px;
       font-size: clamp(9px, 2vw, 11px);
-      font-family: 'DM Mono', monospace;
-      letter-spacing: 0.06em;
+      font-family: 'DM Mono', monospace; letter-spacing: 0.06em;
       border-right: 1px solid rgba(255,255,255,0.04);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 4px;
+      display: flex; align-items: center; justify-content: center; gap: 4px;
       white-space: nowrap;
     }
     .social-item:last-child { border-right: none; }
@@ -194,41 +136,20 @@
     .social-item.green span { color: var(--green); }
     .social-item.blue  span { color: var(--blue); }
 
-    /* ══════════════════════════════════════════
-       BOTTOM NAVIGATION
-    ══════════════════════════════════════════ */
     .bottom-nav {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
+      position: fixed; bottom: 0; left: 0; right: 0;
       background: rgba(5,7,15,0.97);
-      backdrop-filter: blur(24px);
-      -webkit-backdrop-filter: blur(24px);
+      backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
       border-top: 1px solid rgba(255,255,255,0.08);
-      display: flex;
-      justify-content: space-around;
-      align-items: center;
-      padding: 8px 0;
-      padding-bottom: max(8px, env(safe-area-inset-bottom));
+      display: flex; justify-content: space-around; align-items: center;
+      padding: 8px 0; padding-bottom: max(8px, env(safe-area-inset-bottom));
       z-index: 200;
     }
     .bnav-item {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 3px;
-      padding: 6px 4px;
-      cursor: pointer;
-      color: rgba(255,255,255,0.35);
-      font-size: clamp(8px, 2vw, 10px);
-      font-weight: 700;
-      letter-spacing: 0.06em;
-      transition: all .2s;
-      border-radius: 10px;
-      margin: 0 4px;
-      position: relative;
+      flex: 1; display: flex; flex-direction: column; align-items: center; gap: 3px;
+      padding: 6px 4px; cursor: pointer; color: rgba(255,255,255,0.35);
+      font-size: clamp(8px, 2vw, 10px); font-weight: 700; letter-spacing: 0.06em;
+      transition: all .2s; border-radius: 10px; margin: 0 4px; position: relative;
       -webkit-tap-highlight-color: transparent;
     }
     .bnav-item .icon { font-size: clamp(18px, 4vw, 22px); transition: transform .2s; }
@@ -238,60 +159,28 @@
     .bnav-item.vip-nav.active { color: var(--gold); }
     .bnav-item.vip-nav.active .icon { filter: drop-shadow(0 0 8px var(--gold)); }
     .bnav-item::after {
-      content: '';
-      position: absolute;
-      bottom: -1px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 0;
-      height: 2px;
-      background: var(--green);
-      border-radius: 2px;
-      transition: width .2s;
+      content: ''; position: absolute; bottom: -1px; left: 50%; transform: translateX(-50%);
+      width: 0; height: 2px; background: var(--green); border-radius: 2px; transition: width .2s;
     }
     .bnav-item.active::after { width: 24px; }
     .bnav-item.vip-nav.active::after { background: var(--gold); }
 
-    /* ══════════════════════════════════════════
-       LAYOUT WRAPPER
-    ══════════════════════════════════════════ */
-    .page-wrap {
-      width: 100%;
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 0 12px;
-    }
+    .page-wrap { width: 100%; max-width: 1200px; margin: 0 auto; padding: 0 12px; }
 
-    /* ══════════════════════════════════════════
-       SECTION TITLES
-    ══════════════════════════════════════════ */
     .section-title {
-      margin: 14px 0;
-      font-size: clamp(11px, 2.5vw, 14px);
-      font-weight: 700;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
+      margin: 14px 0; font-size: clamp(11px, 2.5vw, 14px); font-weight: 700;
+      letter-spacing: 0.15em; text-transform: uppercase;
     }
     #freeSection .section-title { color: var(--blue); }
-    #vipSection .section-title {
-      color: var(--gold);
-      text-shadow: 0 0 20px rgba(245,200,66,0.4);
-    }
+    #vipSection .section-title { color: var(--gold); text-shadow: 0 0 20px rgba(245,200,66,0.4); }
     #vipSection .section-title::before { content: '✦ '; }
     #vipSection .section-title::after  { content: ' ✦'; }
 
-    /* ══════════════════════════════════════════
-       WIN STREAK BAR
-    ══════════════════════════════════════════ */
     .streak-bar {
       margin: 0 0 var(--gap-md);
-      background: rgba(0,232,122,0.06);
-      border: 1px solid rgba(0,232,122,0.15);
-      border-radius: var(--radius);
-      padding: 12px 16px;
-      display: flex;
-      align-items: center;
-      gap: 12px;
+      background: rgba(0,232,122,0.06); border: 1px solid rgba(0,232,122,0.15);
+      border-radius: var(--radius); padding: 12px 16px;
+      display: flex; align-items: center; gap: 12px;
     }
     .streak-emoji { font-size: clamp(18px, 4vw, 24px); }
     .streak-text { flex: 1; text-align: left; }
@@ -299,82 +188,38 @@
     .streak-text small { font-size: clamp(9px, 2vw, 11px); opacity: .4; font-family: 'DM Mono', monospace; letter-spacing: 0.06em; display: block; margin-top: 2px; }
     .streak-num { font-size: clamp(22px, 5vw, 32px); font-weight: 800; color: var(--green); font-family: 'DM Mono', monospace; text-shadow: 0 0 20px rgba(0,232,122,0.5); }
 
-    /* ══════════════════════════════════════════
-       CARD
-    ══════════════════════════════════════════ */
     .card {
       margin: 0 0 var(--gap-lg);
       background: rgba(10,14,28,0.85);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      padding: var(--card-pad);
-      border-radius: var(--radius-lg);
-      border: 1px solid var(--border);
-      box-shadow: 0 12px 50px rgba(0,0,0,.5);
-      overflow: hidden;
-      position: relative;
+      backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+      padding: var(--card-pad); border-radius: var(--radius-lg);
+      border: 1px solid var(--border); box-shadow: 0 12px 50px rgba(0,0,0,.5);
+      overflow: hidden; position: relative;
     }
-
-    /* VIP Card special */
     #vipSection .card {
       border-color: rgba(245,200,66,0.2);
       background: rgba(8,10,20,0.92);
-      box-shadow:
-        0 0 0 1px rgba(245,200,66,0.08),
-        0 20px 60px rgba(0,0,0,0.6),
-        inset 0 1px 0 rgba(245,200,66,0.1);
+      box-shadow: 0 0 0 1px rgba(245,200,66,0.08), 0 20px 60px rgba(0,0,0,0.6), inset 0 1px 0 rgba(245,200,66,0.1);
     }
     #vipSection .card::before {
-      content: '';
-      position: absolute;
-      top: 0; left: 0; right: 0;
-      height: 2px;
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
       background: linear-gradient(90deg, transparent, var(--gold), transparent);
     }
 
-    /* ══════════════════════════════════════════
-       TABLE — RESPONSIVE
-    ══════════════════════════════════════════ */
-    .table-scroll {
-      width: 100%;
-      overflow-x: auto;
-      -webkit-overflow-scrolling: touch;
-      margin: 0 -2px;
-      padding: 0 2px;
-    }
+    .table-scroll { width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; margin: 0 -2px; padding: 0 2px; }
     table { width: 100%; border-collapse: collapse; min-width: 320px; }
-    td, th {
-      padding: clamp(6px, 1.5vw, 12px) clamp(3px, 1vw, 8px);
-      text-align: center;
-      font-size: clamp(10px, 2vw, 13px);
-      word-break: break-word;
-    }
-    th {
-      font-family: 'DM Mono', monospace;
-      font-size: clamp(8px, 1.6vw, 11px);
-      letter-spacing: 0.1em;
-      opacity: 0.4;
-      padding-bottom: 12px;
-      border-bottom: 1px solid var(--border);
-      white-space: nowrap;
-    }
+    td, th { padding: clamp(6px, 1.5vw, 12px) clamp(3px, 1vw, 8px); text-align: center; font-size: clamp(10px, 2vw, 13px); word-break: break-word; }
+    th { font-family: 'DM Mono', monospace; font-size: clamp(8px, 1.6vw, 11px); letter-spacing: 0.1em; opacity: 0.4; padding-bottom: 12px; border-bottom: 1px solid var(--border); white-space: nowrap; }
     td { border-bottom: 1px solid rgba(255,255,255,0.04); }
-
-    /* Column widths */
     th:nth-child(1), td:nth-child(1) { width: 13%; }
     th:nth-child(2), td:nth-child(2) { width: 32%; text-align: left; }
     th:nth-child(3), td:nth-child(3) { width: 25%; }
     th:nth-child(4), td:nth-child(4) { width: 14%; }
     th:nth-child(5), td:nth-child(5) { width: 16%; }
-
     tbody tr { transition: background .2s; animation: rowIn .4s ease both; }
     tbody tr:hover { background: rgba(255,255,255,0.03); }
     #vipSection tbody tr:hover { background: rgba(245,200,66,0.03); }
-
-    @keyframes rowIn {
-      from { opacity: 0; transform: translateY(8px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
+    @keyframes rowIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
     tbody tr:nth-child(1)  { animation-delay: .05s; }
     tbody tr:nth-child(2)  { animation-delay: .10s; }
     tbody tr:nth-child(3)  { animation-delay: .15s; }
@@ -384,76 +229,31 @@
     tbody tr:nth-child(7)  { animation-delay: .35s; }
     tbody tr:nth-child(8)  { animation-delay: .40s; }
 
-    /* ══════════════════════════════════════════
-       STATUS CLASSES
-    ══════════════════════════════════════════ */
     .free     { color: var(--blue);  font-weight: 600; }
     .vip-lock { color: var(--gold);  font-weight: 700; }
     .win      { color: var(--green); font-weight: 700; }
     .lost     { color: var(--red);   font-weight: 700; }
     .pending  { color: rgba(255,255,255,0.5); font-weight: 600; }
 
-    /* ══════════════════════════════════════════
-       VIP PREMIUM BADGE
-    ══════════════════════════════════════════ */
     .vip-premium {
       display: inline-block;
       background: linear-gradient(135deg, #f5c842 0%, #e0a020 50%, #f5c842 100%);
-      background-size: 200% 200%;
-      animation: shimmer 2.5s infinite linear;
-      color: #07080f;
-      font-weight: 800;
-      font-size: clamp(10px, 2vw, 12px);
-      padding: 4px 10px;
-      border-radius: 7px;
-      letter-spacing: 0.06em;
+      background-size: 200% 200%; animation: shimmer 2.5s infinite linear;
+      color: #07080f; font-weight: 800; font-size: clamp(10px, 2vw, 12px);
+      padding: 4px 10px; border-radius: 7px; letter-spacing: 0.06em;
       box-shadow: 0 2px 14px rgba(245,200,66,0.35);
     }
-
-    /* VIP security — blurred locked content */
-    .vip-blur {
-      filter: blur(5px);
-      user-select: none;
-      pointer-events: none;
-      opacity: 0.5;
-    }
     .vip-lock-overlay {
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-      background: rgba(245,200,66,0.08);
-      border: 1px solid rgba(245,200,66,0.2);
-      color: var(--gold);
-      font-size: clamp(9px, 1.8vw, 11px);
-      font-weight: 700;
-      padding: 4px 10px;
-      border-radius: 8px;
-      letter-spacing: 0.06em;
+      display: inline-flex; align-items: center; gap: 4px;
+      background: rgba(245,200,66,0.08); border: 1px solid rgba(245,200,66,0.2);
+      color: var(--gold); font-size: clamp(9px, 1.8vw, 11px); font-weight: 700;
+      padding: 4px 10px; border-radius: 8px; letter-spacing: 0.06em;
     }
+    @keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
 
-    @keyframes shimmer {
-      0%   { background-position: 200% 0; }
-      100% { background-position: -200% 0; }
-    }
-
-    /* ══════════════════════════════════════════
-       SUMMARY BOX
-    ══════════════════════════════════════════ */
-    .summary-box {
-      margin-top: 14px;
-      font-family: 'DM Mono', monospace;
-      border-radius: 12px;
-      overflow: hidden;
-      border: 1px solid var(--border);
-    }
+    .summary-box { margin-top: 14px; font-family: 'DM Mono', monospace; border-radius: 12px; overflow: hidden; border: 1px solid var(--border); }
     .summary-stats { display: flex; }
-    .summary-stat {
-      flex: 1;
-      padding: clamp(8px, 2vw, 14px) 6px;
-      border-right: 1px solid rgba(255,255,255,0.04);
-      font-size: clamp(8px, 1.5vw, 10px);
-      letter-spacing: 0.06em;
-    }
+    .summary-stat { flex: 1; padding: clamp(8px, 2vw, 14px) 6px; border-right: 1px solid rgba(255,255,255,0.04); font-size: clamp(8px, 1.5vw, 10px); letter-spacing: 0.06em; }
     .summary-stat:last-child { border-right: none; }
     .summary-stat .s-val { font-size: clamp(15px, 3.5vw, 20px); font-weight: 800; display: block; margin-bottom: 2px; }
     .summary-stat .s-label { opacity: .4; font-size: clamp(7px, 1.4vw, 9px); }
@@ -462,43 +262,16 @@
     .summary-stat.odds .s-val { color: var(--gold); }
     .summary-stat.rate .s-val { color: var(--blue); }
 
-    .progress-wrap {
-      padding: 10px 14px;
-      background: rgba(0,0,0,0.3);
-      border-top: 1px solid rgba(255,255,255,0.04);
-    }
+    .progress-wrap { padding: 10px 14px; background: rgba(0,0,0,0.3); border-top: 1px solid rgba(255,255,255,0.04); }
     .progress-label { display: flex; justify-content: space-between; font-size: 9px; opacity: .4; margin-bottom: 6px; letter-spacing: 0.08em; }
     .progress-track { height: 5px; background: rgba(255,255,255,0.06); border-radius: 10px; overflow: hidden; }
-    .progress-fill {
-      height: 100%;
-      border-radius: 10px;
-      background: linear-gradient(90deg, var(--green), #00c060);
-      transition: width 1s cubic-bezier(.34,1.56,.64,1);
-      position: relative;
-    }
-    .progress-fill::after {
-      content: '';
-      position: absolute;
-      right: 0; top: 0; bottom: 0;
-      width: 6px;
-      background: white;
-      border-radius: 3px;
-      opacity: 0.8;
-    }
+    .progress-fill { height: 100%; border-radius: 10px; background: linear-gradient(90deg, var(--green), #00c060); transition: width 1s cubic-bezier(.34,1.56,.64,1); position: relative; }
+    .progress-fill::after { content: ''; position: absolute; right: 0; top: 0; bottom: 0; width: 6px; background: white; border-radius: 3px; opacity: 0.8; }
     #vipSection .summary-box   { border-color: rgba(245,200,66,0.1); }
     #vipSection .progress-fill { background: linear-gradient(90deg, var(--gold), var(--gold2)); }
     #vipSection .progress-fill::after { background: var(--gold); }
 
-    /* ══════════════════════════════════════════
-       SKELETON
-    ══════════════════════════════════════════ */
-    .skeleton-row {
-      display: flex;
-      gap: 8px;
-      padding: 12px 0;
-      border-bottom: 1px solid rgba(255,255,255,0.04);
-      animation: shimmer-sk 1.5s infinite;
-    }
+    .skeleton-row { display: flex; gap: 8px; padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.04); animation: shimmer-sk 1.5s infinite; }
     .skeleton-cell { height: 12px; border-radius: 6px; background: rgba(255,255,255,0.06); }
     .skeleton-cell:nth-child(1) { width: 13%; }
     .skeleton-cell:nth-child(2) { width: 32%; }
@@ -507,432 +280,165 @@
     .skeleton-cell:nth-child(5) { width: 16%; }
     @keyframes shimmer-sk { 0%,100%{opacity:0.6;} 50%{opacity:1;} }
 
-    /* ══════════════════════════════════════════
-       EMPTY STATE
-    ══════════════════════════════════════════ */
     .empty-state { padding: 40px 24px; text-align: center; }
     .empty-state .e-icon { font-size: 44px; margin-bottom: 12px; opacity: 0.5; }
     .empty-state h3 { font-size: clamp(13px, 3vw, 16px); font-weight: 700; opacity: .5; letter-spacing: 0.1em; }
     .empty-state p  { font-size: 11px; opacity: .3; margin-top: 6px; font-family: 'DM Mono', monospace; letter-spacing: 0.06em; }
 
-    /* ══════════════════════════════════════════
-       VIP AUTH BOX
-    ══════════════════════════════════════════ */
     #authBox {
-      max-width: 400px;
-      margin: 0 auto 20px;
-      background: rgba(10,14,28,0.9);
-      border: 1px solid rgba(245,200,66,0.15);
-      border-radius: var(--radius-lg);
-      padding: clamp(20px, 5vw, 36px) clamp(16px, 5vw, 28px);
-      position: relative;
-      overflow: hidden;
+      max-width: 400px; margin: 0 auto 20px;
+      background: rgba(10,14,28,0.9); border: 1px solid rgba(245,200,66,0.15);
+      border-radius: var(--radius-lg); padding: clamp(20px, 5vw, 36px) clamp(16px, 5vw, 28px);
+      position: relative; overflow: hidden;
     }
-    #authBox::before {
-      content: '';
-      position: absolute;
-      top: 0; left: 0; right: 0;
-      height: 1px;
-      background: linear-gradient(90deg, transparent, #f5c842, transparent);
-    }
+    #authBox::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent, #f5c842, transparent); }
     #authBox input {
-      width: 100%;
-      padding: 13px 16px;
-      border-radius: 12px;
-      border: 1px solid rgba(255,255,255,0.1);
-      background: rgba(255,255,255,0.05);
-      color: white;
-      font-family: 'Syne', sans-serif;
-      font-size: 14px;
-      outline: none;
-      transition: border .2s;
-      margin-bottom: 12px;
+      width: 100%; padding: 13px 16px; border-radius: 12px;
+      border: 1px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.05); color: white;
+      font-family: 'Syne', sans-serif; font-size: 14px; outline: none; transition: border .2s; margin-bottom: 12px;
     }
     #authBox input:focus { border-color: var(--gold); }
     #authBox button#authBtn {
-      width: 100%;
-      padding: 14px;
-      border: none;
-      border-radius: 12px;
-      background: linear-gradient(135deg, var(--gold), var(--gold2));
-      color: #07080f;
-      font-family: 'Syne', sans-serif;
-      font-size: 14px;
-      font-weight: 800;
-      letter-spacing: 0.08em;
-      cursor: pointer;
-      box-shadow: 0 4px 20px rgba(245,200,66,0.3);
-      transition: transform .2s, box-shadow .2s;
+      width: 100%; padding: 14px; border: none; border-radius: 12px;
+      background: linear-gradient(135deg, var(--gold), var(--gold2)); color: #07080f;
+      font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 800; letter-spacing: 0.08em;
+      cursor: pointer; box-shadow: 0 4px 20px rgba(245,200,66,0.3); transition: transform .2s, box-shadow .2s;
       -webkit-tap-highlight-color: transparent;
     }
     #authBox button#authBtn:hover { transform: translateY(-2px); box-shadow: 0 6px 28px rgba(245,200,66,0.45); }
     #authBox button#authBtn:active { transform: scale(0.97); }
+    #authBox button#authBtn:disabled { opacity: .5; cursor: not-allowed; transform: none; }
 
-    /* ══════════════════════════════════════════
-       VIP STATUS CARD (no logout button)
-    ══════════════════════════════════════════ */
+    .plans-title {
+      font-size: 11px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase;
+      color: rgba(255,255,255,0.4); text-align: left; margin-bottom: 10px;
+    }
+    .vip-plans { display: flex; flex-direction: column; gap: 10px; margin-bottom: 22px; }
+    .plan-card {
+      display: flex; align-items: center; justify-content: space-between;
+      background: rgba(245,200,66,0.04); border: 1px solid rgba(245,200,66,0.15);
+      border-radius: 14px; padding: 13px 16px; cursor: pointer; text-align: left;
+      transition: all .2s; -webkit-tap-highlight-color: transparent; position: relative;
+    }
+    .plan-card:hover { border-color: rgba(245,200,66,0.4); transform: translateY(-1px); }
+    .plan-card.selected {
+      border-color: var(--gold); background: rgba(245,200,66,0.1);
+      box-shadow: 0 0 0 1px var(--gold), 0 6px 20px rgba(245,200,66,0.15);
+    }
+    .plan-left { display: flex; align-items: center; gap: 10px; }
+    .plan-radio {
+      width: 18px; height: 18px; border-radius: 50%; border: 2px solid rgba(245,200,66,0.35);
+      flex-shrink: 0; display: flex; align-items: center; justify-content: center; transition: all .2s;
+    }
+    .plan-card.selected .plan-radio { border-color: var(--gold); }
+    .plan-radio::after {
+      content: ''; width: 9px; height: 9px; border-radius: 50%; background: var(--gold);
+      transform: scale(0); transition: transform .2s;
+    }
+    .plan-card.selected .plan-radio::after { transform: scale(1); }
+    .plan-name { font-size: clamp(12px, 2.8vw, 14px); font-weight: 800; letter-spacing: 0.04em; }
+    .plan-duration { font-size: clamp(9px, 1.8vw, 11px); opacity: .4; font-family: 'DM Mono', monospace; letter-spacing: 0.04em; margin-top: 2px; }
+    .plan-price { font-size: clamp(13px, 3vw, 16px); font-weight: 800; color: var(--gold); font-family: 'DM Mono', monospace; white-space: nowrap; }
+    .plan-badge {
+      font-size: 8px; font-weight: 800; background: var(--red); color: #fff;
+      padding: 2px 7px; border-radius: 20px; letter-spacing: 0.06em; margin-left: 8px; vertical-align: middle;
+    }
+
     .vip-status-active {
       background: linear-gradient(135deg, #0a1020, #0d1830);
       border: 1px solid rgba(245,200,66,0.25);
       padding: clamp(20px, 5vw, 32px) clamp(16px, 5vw, 24px);
-      border-radius: var(--radius-lg);
-      position: relative;
-      overflow: hidden;
+      border-radius: var(--radius-lg); position: relative; overflow: hidden;
       box-shadow: 0 0 0 1px rgba(245,200,66,0.08), 0 20px 60px rgba(0,0,0,.6), 0 0 40px rgba(245,200,66,0.06) inset;
     }
-    .vip-status-active::before {
-      content: '';
-      position: absolute;
-      top: 0; left: 0; right: 0;
-      height: 1px;
-      background: linear-gradient(90deg, transparent 0%, var(--gold) 50%, transparent 100%);
-    }
-    .vip-status-active::after {
-      content: '💎';
-      position: absolute;
-      top: -20px; right: -20px;
-      font-size: 100px;
-      opacity: 0.04;
-      transform: rotate(15deg);
-    }
+    .vip-status-active::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent 0%, var(--gold) 50%, transparent 100%); }
+    .vip-status-active::after { content: '💎'; position: absolute; top: -20px; right: -20px; font-size: 100px; opacity: 0.04; transform: rotate(15deg); }
 
     .vip-crown { font-size: clamp(30px, 7vw, 42px); margin-bottom: 8px; display: block; animation: float 3s ease-in-out infinite; }
     @keyframes float { 0%,100%{transform:translateY(0);} 50%{transform:translateY(-6px);} }
 
-    .vip-status-title {
-      font-size: clamp(16px, 4vw, 22px);
-      font-weight: 800;
-      letter-spacing: 0.12em;
-      color: var(--gold);
-      text-shadow: 0 0 30px rgba(245,200,66,0.4);
-      margin-bottom: 4px;
-    }
-    .vip-expiry {
-      font-family: 'DM Mono', monospace;
-      font-size: clamp(10px, 2vw, 12px);
-      color: rgba(255,255,255,0.45);
-      letter-spacing: 0.1em;
-      margin-bottom: 10px;
-    }
+    .vip-status-title { font-size: clamp(16px, 4vw, 22px); font-weight: 800; letter-spacing: 0.12em; color: var(--gold); text-shadow: 0 0 30px rgba(245,200,66,0.4); margin-bottom: 4px; }
+    .vip-expiry { font-family: 'DM Mono', monospace; font-size: clamp(10px, 2vw, 12px); color: rgba(255,255,255,0.45); letter-spacing: 0.1em; margin-bottom: 10px; }
 
-    /* Auto-logout countdown */
     .vip-countdown-wrap {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      background: rgba(255,59,92,0.08);
-      border: 1px solid rgba(255,59,92,0.2);
-      border-radius: 10px;
-      padding: 8px 14px;
-      margin-bottom: 14px;
-      font-family: 'DM Mono', monospace;
-      font-size: clamp(9px, 2vw, 11px);
-      color: rgba(255,255,255,0.5);
-      letter-spacing: 0.06em;
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      background: rgba(255,59,92,0.08); border: 1px solid rgba(255,59,92,0.2);
+      border-radius: 10px; padding: 8px 14px; margin-bottom: 14px;
+      font-family: 'DM Mono', monospace; font-size: clamp(9px, 2vw, 11px); color: rgba(255,255,255,0.5); letter-spacing: 0.06em;
     }
-    .vip-countdown-wrap.urgent {
-      border-color: rgba(255,59,92,0.5);
-      background: rgba(255,59,92,0.12);
-      color: var(--red);
-      animation: pulse-red 1.5s infinite;
-    }
+    .vip-countdown-wrap.urgent { border-color: rgba(255,59,92,0.5); background: rgba(255,59,92,0.12); color: var(--red); animation: pulse-red 1.5s infinite; }
     @keyframes pulse-red { 0%,100%{opacity:1;} 50%{opacity:0.7;} }
 
     .vip-days-remaining {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      background: rgba(245,200,66,0.08);
-      border: 1px solid rgba(245,200,66,0.18);
-      border-radius: 10px;
-      padding: 7px 16px;
-      font-family: 'DM Mono', monospace;
-      font-size: clamp(10px, 2vw, 12px);
-      color: var(--gold);
-      letter-spacing: 0.08em;
-      margin-bottom: 14px;
+      display: inline-flex; align-items: center; gap: 6px;
+      background: rgba(245,200,66,0.08); border: 1px solid rgba(245,200,66,0.18);
+      border-radius: 10px; padding: 7px 16px;
+      font-family: 'DM Mono', monospace; font-size: clamp(10px, 2vw, 12px); color: var(--gold); letter-spacing: 0.08em; margin-bottom: 14px;
     }
     .vip-days-num { font-size: clamp(16px, 4vw, 22px); font-weight: 800; color: var(--gold); }
 
-    .vip-tier {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      padding: 5px 14px;
-      border-radius: 30px;
-      font-size: clamp(10px, 2vw, 12px);
-      font-weight: 800;
-      letter-spacing: 0.08em;
-      margin-bottom: 14px;
-    }
+    .vip-tier { display: inline-flex; align-items: center; gap: 6px; padding: 5px 14px; border-radius: 30px; font-size: clamp(10px, 2vw, 12px); font-weight: 800; letter-spacing: 0.08em; margin-bottom: 14px; }
     .vip-tier.bronze  { background: rgba(180,100,40,0.15); border: 1px solid rgba(180,100,40,0.35); color: #cd7f32; }
     .vip-tier.silver  { background: rgba(192,192,192,0.12); border: 1px solid rgba(192,192,192,0.3); color: #C0C0C0; }
     .vip-tier.gold    { background: rgba(245,200,66,0.12); border: 1px solid rgba(245,200,66,0.3); color: var(--gold); }
     .vip-tier.diamond { background: rgba(56,189,248,0.12); border: 1px solid rgba(56,189,248,0.3); color: var(--blue); }
 
     .vip-stat-row { display: flex; justify-content: center; gap: 10px; margin-bottom: 6px; flex-wrap: wrap; }
-    .vip-stat {
-      background: rgba(245,200,66,0.07);
-      border: 1px solid rgba(245,200,66,0.15);
-      border-radius: 10px;
-      padding: 7px 14px;
-      font-size: clamp(9px, 1.8vw, 11px);
-      color: var(--gold);
-      letter-spacing: 0.08em;
-      font-weight: 600;
-    }
+    .vip-stat { background: rgba(245,200,66,0.07); border: 1px solid rgba(245,200,66,0.15); border-radius: 10px; padding: 7px 14px; font-size: clamp(9px, 1.8vw, 11px); color: var(--gold); letter-spacing: 0.08em; font-weight: 600; }
 
-    /* ══════════════════════════════════════════
-       VIP REQUEST CARD
-    ══════════════════════════════════════════ */
-    .vip-request-card {
-      background: linear-gradient(135deg, #0a1020, #0d1830);
-      border: 1px solid rgba(245,200,66,0.15);
-      padding: clamp(20px, 5vw, 32px) clamp(16px, 5vw, 24px);
-      border-radius: var(--radius-lg);
-      position: relative;
-      overflow: hidden;
-    }
-    .vip-request-card::before {
-      content: '';
-      position: absolute;
-      top: 0; left: 0; right: 0;
-      height: 1px;
-      background: linear-gradient(90deg, transparent, var(--gold), transparent);
-    }
-    .email-badge {
-      display: inline-block;
-      background: rgba(245,200,66,0.08);
-      border: 1px solid rgba(245,200,66,0.15);
-      color: var(--gold);
-      font-family: 'DM Mono', monospace;
-      font-size: clamp(10px, 2vw, 12px);
-      padding: 6px 14px;
-      border-radius: 8px;
-      margin-bottom: 18px;
-      letter-spacing: 0.06em;
-      word-break: break-all;
-    }
-    .request-title { font-size: clamp(15px, 3.5vw, 20px); font-weight: 800; letter-spacing: 0.08em; margin-bottom: 6px; }
-    .request-sub { font-size: clamp(11px, 2.2vw, 13px); opacity: 0.45; margin-bottom: 24px; letter-spacing: 0.04em; }
     .whatsapp-btn {
-      display: block;
-      width: 100%;
-      max-width: 280px;
-      margin: 0 auto 14px;
-      background: linear-gradient(135deg, #25D366, #1aad53);
-      color: white;
-      padding: 14px;
-      border: none;
-      border-radius: 12px;
-      font-family: 'Syne', sans-serif;
-      font-size: clamp(13px, 3vw, 15px);
-      font-weight: 800;
-      letter-spacing: 0.06em;
-      cursor: pointer;
-      box-shadow: 0 4px 20px rgba(37,211,102,0.3);
-      transition: all .2s;
-      -webkit-tap-highlight-color: transparent;
+      display: block; width: 100%; max-width: 280px; margin: 0 auto 14px;
+      background: linear-gradient(135deg, #25D366, #1aad53); color: white; padding: 14px; border: none; border-radius: 12px;
+      font-family: 'Syne', sans-serif; font-size: clamp(13px, 3vw, 15px); font-weight: 800; letter-spacing: 0.06em;
+      cursor: pointer; box-shadow: 0 4px 20px rgba(37,211,102,0.3); transition: all .2s; -webkit-tap-highlight-color: transparent;
     }
     .whatsapp-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 28px rgba(37,211,102,0.45); }
     .whatsapp-btn:active { transform: scale(0.97); }
 
-    /* ══════════════════════════════════════════
-       HISTORY
-    ══════════════════════════════════════════ */
-    .hist-tabs {
-      display: flex;
-      justify-content: center;
-      gap: 10px;
-      margin: 14px 0;
-      flex-wrap: wrap;
-    }
-    .hist-tab {
-      padding: 10px 22px;
-      border-radius: 12px;
-      font-family: 'Syne', sans-serif;
-      font-size: clamp(11px, 2.5vw, 14px);
-      font-weight: 700;
-      letter-spacing: 0.06em;
-      cursor: pointer;
-      transition: all .2s;
-      -webkit-tap-highlight-color: transparent;
-    }
-    .date-group {
-      background: rgba(0,0,0,0.4);
-      padding: 8px 12px;
-      margin-top: 12px;
-      border-radius: 8px;
-      font-size: 11px;
-      font-family: 'DM Mono', monospace;
-      letter-spacing: 0.1em;
-      text-align: left;
-      color: rgba(255,255,255,0.5);
-      border-left: 3px solid var(--gold);
-    }
+    .hist-tabs { display: flex; justify-content: center; gap: 10px; margin: 14px 0; flex-wrap: wrap; }
+    .hist-tab { padding: 10px 22px; border-radius: 12px; font-family: 'Syne', sans-serif; font-size: clamp(11px, 2.5vw, 14px); font-weight: 700; letter-spacing: 0.06em; cursor: pointer; transition: all .2s; -webkit-tap-highlight-color: transparent; }
+    .date-group { background: rgba(0,0,0,0.4); padding: 8px 12px; margin-top: 12px; border-radius: 8px; font-size: 11px; font-family: 'DM Mono', monospace; letter-spacing: 0.1em; text-align: left; color: rgba(255,255,255,0.5); border-left: 3px solid var(--gold); }
 
-    /* ══════════════════════════════════════════
-       TESTIMONIALS
-    ══════════════════════════════════════════ */
-    .testimonials {
-      margin: 0 0 var(--gap-lg);
-      overflow: hidden;
-    }
-    .testimonials-track { display: flex; gap: 12px; animation: scroll-left 30s linear infinite; width: max-content; }
-    .testimonials:hover .testimonials-track { animation-play-state: paused; }
-    .testi-item {
-      background: rgba(10,14,28,0.85);
-      border: 1px solid rgba(255,255,255,0.06);
-      border-radius: 12px;
-      padding: 12px 16px;
-      min-width: 190px;
-      max-width: 200px;
-      text-align: left;
-    }
-    .testi-stars { color: var(--gold); font-size: 11px; margin-bottom: 6px; }
-    .testi-text  { font-size: 11px; opacity: .65; line-height: 1.5; margin-bottom: 8px; font-style: italic; }
-    .testi-name  { font-size: 10px; font-weight: 700; letter-spacing: 0.06em; color: var(--gold); }
-    @keyframes scroll-left { from{transform:translateX(0);} to{transform:translateX(-50%);} }
-
-    /* ══════════════════════════════════════════
-       CELEBRATION
-    ══════════════════════════════════════════ */
     .celebration { position: fixed; inset: 0; pointer-events: none; z-index: 9999; }
-    .confetti-piece {
-      position: absolute;
-      width: 8px;
-      height: 8px;
-      border-radius: 2px;
-      animation: confetti-fall 2.5s ease-in forwards;
-    }
-    @keyframes confetti-fall {
-      0%   { opacity:1;  transform: translateY(-20px) rotate(0deg); }
-      100% { opacity:0;  transform: translateY(100vh) rotate(720deg); }
-    }
+    .confetti-piece { position: absolute; width: 8px; height: 8px; border-radius: 2px; animation: confetti-fall 2.5s ease-in forwards; }
+    @keyframes confetti-fall { 0% { opacity:1; transform: translateY(-20px) rotate(0deg); } 100% { opacity:0; transform: translateY(100vh) rotate(720deg); } }
 
-    /* ══════════════════════════════════════════
-       TOAST
-    ══════════════════════════════════════════ */
     #toast {
-      position: fixed;
-      top: max(20px, env(safe-area-inset-top));
-      left: 50%;
-      transform: translateX(-50%);
-      background: linear-gradient(135deg, #00e87a, #00c062);
-      color: #05070f;
-      padding: 12px 20px;
-      border-radius: 12px;
-      box-shadow: 0 8px 30px rgba(0,232,122,0.3);
-      z-index: 9999;
-      font-weight: 700;
-      font-size: clamp(11px, 3vw, 14px);
-      letter-spacing: 0.04em;
-      animation: slideDown .5s ease;
-      white-space: nowrap;
-      max-width: 90vw;
-      overflow: hidden;
-      text-overflow: ellipsis;
+      position: fixed; top: max(20px, env(safe-area-inset-top)); left: 50%; transform: translateX(-50%);
+      background: linear-gradient(135deg, #00e87a, #00c062); color: #05070f; padding: 12px 20px; border-radius: 12px;
+      box-shadow: 0 8px 30px rgba(0,232,122,0.3); z-index: 9999; font-weight: 700; font-size: clamp(11px, 3vw, 14px);
+      letter-spacing: 0.04em; animation: slideDown .5s ease; white-space: nowrap; max-width: 90vw; overflow: hidden; text-overflow: ellipsis;
     }
 
-    /* ══════════════════════════════════════════
-       POPUP
-    ══════════════════════════════════════════ */
     .popup {
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.75);
-      backdrop-filter: blur(6px);
-      -webkit-backdrop-filter: blur(6px);
-      display: none;
-      justify-content: center;
-      align-items: center;
-      z-index: 9000;
-      padding: 20px;
+      position: fixed; inset: 0; background: rgba(0,0,0,0.75); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+      display: none; justify-content: center; align-items: center; z-index: 9000; padding: 20px;
     }
     .popup-box {
-      background: #0d1120;
-      border: 1px solid rgba(245,200,66,0.2);
-      color: white;
-      padding: clamp(20px, 5vw, 32px) clamp(16px, 5vw, 28px);
-      border-radius: var(--radius-lg);
-      width: 100%;
-      max-width: 380px;
-      text-align: center;
-      animation: fadeIn .3s ease;
+      background: #0d1120; border: 1px solid rgba(245,200,66,0.2); color: white;
+      padding: clamp(20px, 5vw, 32px) clamp(16px, 5vw, 28px); border-radius: var(--radius-lg);
+      width: 100%; max-width: 380px; text-align: center; animation: fadeIn .3s ease;
       box-shadow: 0 20px 60px rgba(0,0,0,.8), 0 0 0 1px rgba(245,200,66,0.05);
     }
     .popup-box p { font-size: clamp(12px, 3vw, 15px); line-height: 1.6; opacity: 0.85; margin-bottom: 20px; }
-    .popup-box button {
-      padding: 11px 28px;
-      border: none;
-      background: linear-gradient(135deg, var(--gold), var(--gold2));
-      color: #05070f;
-      border-radius: 10px;
-      font-family: 'Syne', sans-serif;
-      font-weight: 800;
-      font-size: 13px;
-      cursor: pointer;
-      letter-spacing: 0.06em;
-    }
+    .popup-box button { padding: 11px 28px; border: none; background: linear-gradient(135deg, var(--gold), var(--gold2)); color: #05070f; border-radius: 10px; font-family: 'Syne', sans-serif; font-weight: 800; font-size: 13px; cursor: pointer; letter-spacing: 0.06em; }
 
-    /* ══════════════════════════════════════════
-       PULL TO REFRESH
-    ══════════════════════════════════════════ */
-    .ptr-indicator {
-      text-align: center;
-      padding: 0;
-      height: 0;
-      overflow: hidden;
-      font-size: 11px;
-      font-family: 'DM Mono', monospace;
-      letter-spacing: 0.1em;
-      color: var(--gold);
-      opacity: 0;
-      transition: height .2s, opacity .2s, padding .2s;
-    }
+    .ptr-indicator { text-align: center; padding: 0; height: 0; overflow: hidden; font-size: 11px; font-family: 'DM Mono', monospace; letter-spacing: 0.1em; color: var(--gold); opacity: 0; transition: height .2s, opacity .2s, padding .2s; }
     .ptr-indicator.active { height: 40px; opacity: 1; padding: 12px 0; }
 
-    /* ══════════════════════════════════════════
-       MISC DETAILS
-    ══════════════════════════════════════════ */
-    td small {
-      font-family: 'DM Mono', monospace;
-      font-size: clamp(8px, 1.5vw, 10px);
-      letter-spacing: 0.06em;
-      opacity: 0.55;
-      display: block;
-      margin-top: 2px;
-    }
+    td small { font-family: 'DM Mono', monospace; font-size: clamp(8px, 1.5vw, 10px); letter-spacing: 0.06em; opacity: 0.55; display: block; margin-top: 2px; }
+    .footer { padding: 20px 20px 10px; font-family: 'DM Mono', monospace; font-size: clamp(8px, 1.5vw, 10px); letter-spacing: 0.1em; opacity: .2; }
 
-    .footer {
-      padding: 20px 20px 10px;
-      font-family: 'DM Mono', monospace;
-      font-size: clamp(8px, 1.5vw, 10px);
-      letter-spacing: 0.1em;
-      opacity: .2;
-    }
-
-    /* ══════════════════════════════════════════
-       ANIMATIONS
-    ══════════════════════════════════════════ */
     @keyframes slideDown { from{top:-80px;opacity:0;} to{top:20px;opacity:1;} }
     @keyframes fadeIn    { from{opacity:0;transform:scale(.95);} to{opacity:1;transform:scale(1);} }
     @keyframes slideIn   { from{opacity:0;transform:translateX(20px);} to{opacity:1;transform:translateX(0);} }
     @keyframes notif-pop { 0%{transform:scale(0);} 70%{transform:scale(1.2);} 100%{transform:scale(1);} }
-    @keyframes pulse-badge { 0%,100%{transform:scale(1);opacity:1;} 50%{transform:scale(1.06);opacity:0.9;} }
 
-    /* ══════════════════════════════════════════
-       UTILITIES
-    ══════════════════════════════════════════ */
     .hidden { display: none !important; }
     ::-webkit-scrollbar       { width: 4px; height: 4px; }
     ::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 20px; }
     ::-webkit-scrollbar-track { background: #080b18; }
 
-    /* ══════════════════════════════════════════
-       TABLET (600px+)
-    ══════════════════════════════════════════ */
     @media (min-width: 600px) {
       :root { --card-pad: 20px; --radius: 18px; --radius-lg: 28px; }
       .topbar { padding: 16px 24px; }
@@ -942,73 +448,37 @@
       th { font-size: 10px; }
     }
 
-    /* ══════════════════════════════════════════
-       DESKTOP (900px+)
-    ══════════════════════════════════════════ */
     @media (min-width: 900px) {
       :root { --card-pad: 28px; }
       body { padding-bottom: 0; }
       .bottom-nav { display: none; }
-
-      /* Top horizontal nav on desktop */
       .topbar { padding: 16px 32px; }
-      .desktop-nav {
-        display: flex;
-        gap: 6px;
-        align-items: center;
-      }
+      .desktop-nav { display: flex; gap: 6px; align-items: center; }
       .desktop-nav-btn {
-        padding: 9px 20px;
-        border-radius: 10px;
-        font-family: 'Syne', sans-serif;
-        font-size: 12px;
-        font-weight: 700;
-        letter-spacing: 0.08em;
-        cursor: pointer;
-        border: 1px solid rgba(255,255,255,0.1);
-        background: rgba(255,255,255,0.05);
-        color: rgba(255,255,255,0.6);
-        transition: all .2s;
+        padding: 9px 20px; border-radius: 10px; font-family: 'Syne', sans-serif; font-size: 12px; font-weight: 700;
+        letter-spacing: 0.08em; cursor: pointer; border: 1px solid rgba(255,255,255,0.1);
+        background: rgba(255,255,255,0.05); color: rgba(255,255,255,0.6); transition: all .2s;
       }
       .desktop-nav-btn:hover { background: rgba(255,255,255,0.1); color: white; }
       .desktop-nav-btn.active-free { border-color: rgba(56,189,248,0.4); background: rgba(56,189,248,0.08); color: var(--blue); }
       .desktop-nav-btn.active-vip  { border-color: rgba(245,200,66,0.4); background: rgba(245,200,66,0.08); color: var(--gold); }
       .desktop-nav-btn.active-hist { border-color: rgba(0,232,122,0.4); background: rgba(0,232,122,0.08); color: var(--green); }
-
       td, th { font-size: 14px; padding: 12px 10px; }
       th { font-size: 11px; letter-spacing: 0.12em; }
       .vip-premium { font-size: 13px; padding: 5px 12px; }
-
-      /* Two-column grid for today's tips on desktop */
-      .sections-grid {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 24px;
-        align-items: start;
-      }
-      .sections-grid .page-wrap {
-        padding: 0;
-      }
     }
-
-    @media (min-width: 900px) {
-      .page-wrap { padding: 0 24px; }
-    }
-    @media (min-width: 1200px) {
-      .page-wrap { padding: 0 32px; }
-    }
+    @media (min-width: 900px) { .page-wrap { padding: 0 24px; } }
+    @media (min-width: 1200px) { .page-wrap { padding: 0 32px; } }
   </style>
 </head>
 <body>
 
-<!-- TOP BAR -->
 <div class="topbar">
   <div class="topbar-left">
     <h1>MATCHES VIP</h1>
     <p>PROFESSIONAL FOOTBALL PREDICTIONS</p>
   </div>
   <div class="topbar-right">
-    <!-- Desktop nav (hidden on mobile via CSS) -->
     <div class="desktop-nav" id="desktopNav" style="display:none;">
       <button class="desktop-nav-btn active-free" id="dnavFree" onclick="showSection('free')">🆓 FREE</button>
       <button class="desktop-nav-btn" id="dnavVip" onclick="showSection('vip')">💎 VIP</button>
@@ -1021,7 +491,6 @@
   </div>
 </div>
 
-<!-- NOTIFICATION PANEL -->
 <div class="notif-panel" id="notifPanel">
   <div class="notif-panel-header">
     🔔 NOTIFICATIONS
@@ -1032,19 +501,15 @@
   </div>
 </div>
 
-<!-- SOCIAL PROOF BAR -->
 <div class="social-bar">
-  <div class="social-item">👥 <span id="memberCount">1,247</span> online</div>
-  <div class="social-item green">🔥 Streak <span id="globalStreak">7</span>W</div>
+  <div class="social-item green">🔥 Streak <span id="globalStreak">0</span>W</div>
   <div class="social-item blue">📅 <span id="todayTitle"></span></div>
 </div>
 
-<!-- Pull to refresh -->
 <div class="ptr-indicator" id="ptrIndicator">↑ Release to refresh</div>
 
 <h2 id="title" style="font-size:clamp(11px,2.5vw,13px);opacity:.4;letter-spacing:.12em;font-family:'DM Mono',monospace;margin:12px 0 0;"></h2>
 
-<!-- POPUP -->
 <div id="popup" class="popup">
   <div class="popup-box">
     <div style="font-size:28px;margin-bottom:12px;">💬</div>
@@ -1053,9 +518,6 @@
   </div>
 </div>
 
-<!-- ═══════════════════════════════════
-     FREE SECTION
-═══════════════════════════════════ -->
 <div id="freeSection">
   <div class="page-wrap">
     <div class="section-title">🆓 FREE TIPS</div>
@@ -1100,29 +562,58 @@
       </div>
     </div>
 
-    <div class="testimonials" id="testimonialsWrap">
-      <div class="testimonials-track" id="testimonialsTrack"></div>
-    </div>
   </div>
 </div>
 
-<!-- ═══════════════════════════════════
-     VIP SECTION
-═══════════════════════════════════ -->
 <div id="vipSection" class="hidden">
   <div class="page-wrap">
-    <!-- Auth box -->
     <div id="vipBox">
       <div id="authBox" style="display:none;">
         <div style="font-size:40px;margin-bottom:12px;">👑</div>
-        <div id="authTitle" style="font-size:20px;font-weight:800;letter-spacing:.1em;color:#f5c842;margin-bottom:6px;">LOGIN</div>
-        <p style="font-size:12px;opacity:.4;letter-spacing:.06em;margin-bottom:22px;">Access premium predictions</p>
-        <input id="email"    type="email"    placeholder="Email address" autocomplete="off">
-        <input id="password" type="password" placeholder="Password"      autocomplete="off">
-        <button id="authBtn" onclick="loginUser()">LOGIN</button>
-        <br><br>
-        <small id="switchAuth" onclick="toggleAuth()" style="cursor:pointer;color:var(--blue);font-size:12px;letter-spacing:.04em;">Create account</small>&nbsp;&nbsp;
-        <small onclick="resetPassword()" style="cursor:pointer;color:rgba(255,255,255,.35);font-size:12px;">Forgot password?</small>
+        <div id="authTitle" style="font-size:20px;font-weight:800;letter-spacing:.1em;color:#f5c842;margin-bottom:6px;">VIP CODE</div>
+        <p style="font-size:12px;opacity:.4;letter-spacing:.06em;margin-bottom:22px;">Enter your VIP code to access daily predictions</p>
+
+        <div class="plans-title">💰 CHOOSE A PLAN</div>
+        <div class="vip-plans" id="vipPlans">
+          <div class="plan-card" data-plan="2weeks" data-price="5,000" data-label="2 Weeks" onclick="selectPlan(this)">
+            <div class="plan-left">
+              <div class="plan-radio"></div>
+              <div>
+                <div class="plan-name">2 WEEKS</div>
+                <div class="plan-duration">14 days</div>
+              </div>
+            </div>
+            <div class="plan-price">Tsh 5,000</div>
+          </div>
+          <div class="plan-card" data-plan="1month" data-price="9,000" data-label="1 Month" onclick="selectPlan(this)">
+            <div class="plan-left">
+              <div class="plan-radio"></div>
+              <div>
+                <div class="plan-name">1 MONTH</div>
+                <div class="plan-duration">30 days</div>
+              </div>
+            </div>
+            <div class="plan-price">Tsh 9,000</div>
+          </div>
+          <div class="plan-card" data-plan="3months" data-price="22,000" data-label="3 Months" onclick="selectPlan(this)">
+            <div class="plan-left">
+              <div class="plan-radio"></div>
+              <div>
+                <div class="plan-name">3 MONTHS<span class="plan-badge">BEST VALUE</span></div>
+                <div class="plan-duration">90 days</div>
+              </div>
+            </div>
+            <div class="plan-price">Tsh 22,000</div>
+          </div>
+        </div>
+
+        <input id="vipCodeInput" type="text" placeholder="VIP-XXXX-XXXX" autocomplete="off" style="text-transform:uppercase;text-align:center;letter-spacing:.15em;font-family:'DM Mono',monospace;font-weight:700;" onkeydown="if(event.key==='Enter')unlockVipCode()">
+        <button id="authBtn" onclick="unlockVipCode()">UNLOCK VIP</button>
+        <div id="codeMsg" style="min-height:18px;font-size:12px;margin-top:12px;letter-spacing:.04em;"></div>
+        <div style="margin-top:20px;padding-top:18px;border-top:1px solid rgba(255,255,255,0.06);">
+          <p style="font-size:11px;opacity:.35;margin-bottom:12px;letter-spacing:.04em;">Don't have a VIP code?</p>
+          <button class="whatsapp-btn" style="margin:0 auto;" onclick="goWhatsApp()">💬 PAY / GET VIP CODE - WHATSAPP</button>
+        </div>
       </div>
     </div>
 
@@ -1170,9 +661,6 @@
   </div>
 </div>
 
-<!-- ═══════════════════════════════════
-     HISTORY SECTION
-═══════════════════════════════════ -->
 <div id="historySection" class="hidden">
   <div class="page-wrap">
     <div class="hist-tabs">
@@ -1196,7 +684,6 @@
   </div>
 </div>
 
-<!-- BOTTOM NAVIGATION (mobile/tablet only) -->
 <nav class="bottom-nav">
   <div class="bnav-item active" id="bnavFree" onclick="showSection('free')">
     <div class="icon">🆓</div>
@@ -1214,17 +701,11 @@
 
 <footer class="footer">© 2026 MATCHES VIP • PREMIUM FOOTBALL PREDICTIONS</footer>
 
-<!-- ═══════════════════════════════════
-     FIREBASE + APP LOGIC
-═══════════════════════════════════ -->
 <script type="module">
 import { initializeApp }                                    from "https://www.gstatic.com/firebasejs/12.12.1/firebase-app.js";
 import { getFirestore, collection, query, where,
-         onSnapshot, doc, getDoc, setDoc }                  from "https://www.gstatic.com/firebasejs/12.12.1/firebase-firestore.js";
-import { getAuth, signInWithEmailAndPassword,
-         createUserWithEmailAndPassword, sendEmailVerification,
-         sendPasswordResetEmail, signOut,
-         onAuthStateChanged }                               from "https://www.gstatic.com/firebasejs/12.12.1/firebase-auth.js";
+         onSnapshot, doc, getDoc, getDocs, setDoc, updateDoc,
+         serverTimestamp, increment }                         from "https://www.gstatic.com/firebasejs/12.12.1/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey:            "AIzaSyDbfaPPAFdOSJm09OxQeMqQ-UsLkQzsdxk",
@@ -1236,17 +717,17 @@ const firebaseConfig = {
 };
 const app  = initializeApp(firebaseConfig);
 const db   = getFirestore(app);
-const auth = getAuth(app);
 
 if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js");
 
-let currentUser     = null;
 let vipUnlocked     = false;
-let isLogin         = true;
-let vipExpiryDate   = null;   // Date object for expiry — used for auto-logout
-let autoLogoutTimer = null;   // timer reference
+let vipExpiryDate   = null;
+let autoLogoutTimer = null;
+let codeUnsub       = null;
+let currentVipCode  = localStorage.getItem("vipCode") || null;
 let notifiedMatches = JSON.parse(localStorage.getItem("notifiedMatches")) || {};
 let notifications   = JSON.parse(localStorage.getItem("vipNotifications")) || [];
+let selectedPlan     = null;
 
 const audio = new Audio("https://actions.google.com/sounds/v1/alarms/beep_short.ogg");
 audio.volume = 1;
@@ -1254,72 +735,133 @@ document.body.addEventListener("click", () => {
   audio.play().then(() => { audio.pause(); audio.currentTime = 0; }).catch(() => {});
 }, { once: true });
 
-// ── Date ──────────────────────────────────────────────────────
-const today = new Date();
-const date  = [
-  String(today.getDate()).padStart(2,"0"),
-  String(today.getMonth()+1).padStart(2,"0"),
-  today.getFullYear()
-].join(".");
+// ══════════════════════════════════════════
+// SERVER TIME SYNC
+// ══════════════════════════════════════════
+let serverOffsetMs = 0;
 
-if (localStorage.getItem("lastDate") !== date) {
-  localStorage.removeItem("notifiedMatches");
-  notifiedMatches = {};
-  localStorage.setItem("lastDate", date);
+async function syncServerTime() {
+  try {
+    const ref = doc(db, "_meta", "serverTime");
+    const t0  = Date.now();
+    await setDoc(ref, { ts: serverTimestamp() }, { merge: true });
+    const snap = await getDoc(ref);
+    const t1   = Date.now();
+    const serverMillis = snap.data()?.ts?.toMillis?.();
+    if (serverMillis) {
+      const localMidpoint = (t0 + t1) / 2;
+      serverOffsetMs = serverMillis - localMidpoint;
+    }
+  } catch (e) {
+    console.warn("Could not sync server time, falling back to device clock:", e.message);
+  }
+}
+function now() {
+  return new Date(Date.now() + serverOffsetMs);
 }
 
-document.getElementById("title").innerText = `TODAY — ${date}`;
-document.getElementById("todayTitle").innerText = date;
-if ("Notification" in window) Notification.requestPermission();
+let today = null;
+let date  = null;
 
-// ── Desktop nav visibility ────────────────────────────────────
+function computeDateFromNow() {
+  today = now();
+  date  = [
+    String(today.getDate()).padStart(2,"0"),
+    String(today.getMonth()+1).padStart(2,"0"),
+    today.getFullYear()
+  ].join(".");
+
+  if (localStorage.getItem("lastDate") !== date) {
+    localStorage.removeItem("notifiedMatches");
+    notifiedMatches = {};
+    localStorage.setItem("lastDate", date);
+  }
+
+  document.getElementById("title").innerText = `TODAY — ${date}`;
+  document.getElementById("todayTitle").innerText = date;
+}
+
+// ══════════════════════════════════════════
+// VISITOR TRACKING (also acts as this device's stable ID for VIP-code binding)
+// ══════════════════════════════════════════
+function getVisitorId() {
+  let id = localStorage.getItem("visitorId");
+  if (!id) {
+    id = "v_" + Date.now().toString(36) + "_" + Math.random().toString(36).slice(2, 10);
+    localStorage.setItem("visitorId", id);
+  }
+  return id;
+}
+
+async function trackVisit() {
+  try {
+    const visitorId = getVisitorId();
+    const ref  = doc(db, "analytics_visitors", visitorId);
+    const snap = await getDoc(ref).catch(() => null);
+    const nowISO = now().toISOString();
+
+    if (snap && snap.exists()) {
+      const data = snap.data();
+      const isNewDay = data.lastDate !== date;
+      await setDoc(ref, {
+        lastSeen:   nowISO,
+        lastDate:   date,
+        visits:     increment(1),
+        daysActive: isNewDay ? increment(1) : increment(0)
+      }, { merge: true });
+    } else {
+      await setDoc(ref, {
+        firstSeen:       nowISO,
+        lastSeen:        nowISO,
+        lastDate:        date,
+        visits:          1,
+        daysActive:      1,
+        vipUnlockedEver: false
+      }, { merge: true });
+    }
+  } catch (e) {
+    console.warn("Visitor tracking failed:", e.message);
+  }
+}
+
+function startVisitorHeartbeat() {
+  setInterval(async () => {
+    try {
+      const ref = doc(db, "analytics_visitors", getVisitorId());
+      await setDoc(ref, { lastSeen: now().toISOString() }, { merge: true });
+    } catch (e) { /* ignore transient failures */ }
+  }, 120000);
+}
+
+async function markVisitorVipUnlocked() {
+  try {
+    const ref = doc(db, "analytics_visitors", getVisitorId());
+    await setDoc(ref, { vipUnlockedEver: true }, { merge: true });
+  } catch (e) { /* non-critical */ }
+}
+
+function startDateRolloverWatcher() {
+  setInterval(() => {
+    const n = now();
+    const newDate = [
+      String(n.getDate()).padStart(2,"0"),
+      String(n.getMonth()+1).padStart(2,"0"),
+      n.getFullYear()
+    ].join(".");
+    if (newDate !== date) {
+      window.location.reload();
+    }
+  }, 60000);
+}
+
 function handleDesktopNav() {
   const desktopNav = document.getElementById("desktopNav");
-  if (window.innerWidth >= 900) {
-    desktopNav.style.display = "flex";
-  } else {
-    desktopNav.style.display = "none";
-  }
+  desktopNav.style.display = window.innerWidth >= 900 ? "flex" : "none";
 }
 handleDesktopNav();
 window.addEventListener("resize", handleDesktopNav);
 
-// ── Testimonials ──────────────────────────────────────────────
-const TESTIMONIALS = [
-  { stars: 5, text: "Nilifuata VIP tips leo asubuhi — 4/4 WIN! 🔥", name: "Juma K." },
-  { stars: 5, text: "Odds ya 12.50 ilipata! Asante sana MATCHES VIP", name: "Amani T." },
-  { stars: 5, text: "Best prediction site Tanzania. Kila siku wins.", name: "Grace M." },
-  { stars: 5, text: "Nilikuwa skeptical lakini siku ya kwanza 3 wins!", name: "Hassan B." },
-  { stars: 5, text: "VIP inanisaidia kila wiki. Super accurate 💎", name: "Fatuma S." },
-  { stars: 4, text: "Free tips pia ni nzuri sana. VIP ni level nyingine!", name: "Peter N." },
-];
-function buildTestimonials() {
-  const track = document.getElementById("testimonialsTrack");
-  const doubled = [...TESTIMONIALS, ...TESTIMONIALS];
-  track.innerHTML = doubled.map(t => `
-    <div class="testi-item">
-      <div class="testi-stars">${'★'.repeat(t.stars)}${'☆'.repeat(5-t.stars)}</div>
-      <div class="testi-text">"${t.text}"</div>
-      <div class="testi-name">— ${t.name}</div>
-    </div>
-  `).join("");
-}
-buildTestimonials();
 
-// ── Member count ──────────────────────────────────────────────
-function animateMemberCount() {
-  const el = document.getElementById("memberCount");
-  let base = 1200 + Math.floor(Math.random() * 100);
-  el.innerText = base.toLocaleString();
-  setInterval(() => {
-    base += Math.floor(Math.random() * 7) - 3;
-    if (base < 1000) base = 1000;
-    el.innerText = base.toLocaleString();
-  }, 4000);
-}
-animateMemberCount();
-
-// ── Notifications ─────────────────────────────────────────────
 function renderNotifications() {
   const list    = document.getElementById("notifList");
   const countEl = document.getElementById("notifCount");
@@ -1336,7 +878,7 @@ function renderNotifications() {
   countEl.classList.remove("hidden");
 }
 function addNotification(msg, icon = "🔔") {
-  const time = new Date().toLocaleTimeString([], { hour:'2-digit', minute:'2-digit' });
+  const time = now().toLocaleTimeString([], { hour:'2-digit', minute:'2-digit' });
   notifications.unshift({ msg, icon, time });
   if (notifications.length > 20) notifications.pop();
   localStorage.setItem("vipNotifications", JSON.stringify(notifications));
@@ -1357,7 +899,6 @@ document.addEventListener("click", e => {
 });
 renderNotifications();
 
-// ── Helpers ───────────────────────────────────────────────────
 function showToast(message) {
   document.getElementById("toast")?.remove();
   const toast = Object.assign(document.createElement("div"), { id:"toast", innerText: message });
@@ -1381,7 +922,6 @@ window.showPopup  = function(msg) {
   }
 };
 
-// ── Celebration ───────────────────────────────────────────────
 function showCelebration() {
   const el = document.createElement("div");
   el.className = "celebration";
@@ -1396,7 +936,6 @@ function showCelebration() {
   setTimeout(() => el.remove(), 3500);
 }
 
-// ── Section navigation ────────────────────────────────────────
 window.showSection = function(type) {
   ["freeSection","vipSection","historySection"].forEach(id =>
     document.getElementById(id).classList.add("hidden")
@@ -1419,9 +958,7 @@ window.showSection = function(type) {
     document.getElementById("bnavVip").classList.add("active");
     const d = document.getElementById("dnavVip");
     if (d) d.classList.add("active-vip");
-    // Show auth if not logged in
-    const authBox = document.getElementById("authBox");
-    if (!currentUser) authBox.style.display = "block";
+    if (!vipUnlocked) document.getElementById("authBox").style.display = "block";
   } else {
     document.getElementById("historySection").classList.remove("hidden");
     document.getElementById("bnavHistory").classList.add("active");
@@ -1444,87 +981,63 @@ window.showHistoryType = function(type) {
   vBtn.style.color       = type==="vip"  ? "var(--gold)" : "rgba(255,255,255,.65)";
 };
 
-// ══════════════════════════════════════════
-// AUTO-LOGOUT: fires exactly at expiry time
-// ══════════════════════════════════════════
+window.selectPlan = function(el) {
+  document.querySelectorAll(".plan-card").forEach(c => c.classList.remove("selected"));
+  el.classList.add("selected");
+  selectedPlan = {
+    plan:  el.dataset.plan,
+    price: el.dataset.price,
+    label: el.dataset.label
+  };
+  navigator.vibrate?.([10]);
+};
+
 function scheduleAutoLogout(expiryDate) {
-  // Clear any previous timer
   if (autoLogoutTimer) clearTimeout(autoLogoutTimer);
-
-  const msLeft = expiryDate - new Date();
-  if (msLeft <= 0) {
-    // Already expired — logout immediately
-    performExpiryLogout();
-    return;
-  }
-
-  // Cap at 2^31 - 1 ms (setTimeout limit ~24.8 days)
+  const msLeft = expiryDate - now();
+  if (msLeft <= 0) { performExpiryLogout(); return; }
   const maxTimeout = 2147483647;
   if (msLeft > maxTimeout) {
-    // Schedule a check again in 24 days
     autoLogoutTimer = setTimeout(() => scheduleAutoLogout(expiryDate), maxTimeout);
   } else {
     autoLogoutTimer = setTimeout(performExpiryLogout, msLeft);
   }
 }
 
-async function performExpiryLogout() {
-  if (currentUser) {
-    const userRef = doc(db, "users", currentUser.uid);
-    await setDoc(userRef, { vip: false }, { merge: true }).catch(() => {});
-  }
-  localStorage.removeItem("vipWasUnlocked");
-  await signOut(auth).catch(() => {});
-  showPopup("⏰ VIP expired. Subscription ended.");
-  addNotification("VIP subscription has expired.", "⏰");
+function performExpiryLogout() {
+  clearStoredCode();
+  vipUnlocked   = false;
+  vipExpiryDate = null;
+  document.getElementById("vipRequestCard")?.remove();
+  document.getElementById("authBox").style.display = "block";
+  showPopup("⏰ Your VIP code has expired. Please request a new code.");
+  addNotification("Your VIP code has expired.", "⏰");
 }
 
-// Countdown display in VIP card (updates every minute)
 let countdownInterval = null;
 function startCountdownDisplay() {
   updateCountdownDisplay();
   if (countdownInterval) clearInterval(countdownInterval);
   countdownInterval = setInterval(updateCountdownDisplay, 60000);
 }
-
 function updateCountdownDisplay() {
   if (!vipExpiryDate) return;
   const el = document.getElementById("vipCountdown");
   if (!el) return;
-  const msLeft = vipExpiryDate - new Date();
+  const msLeft = vipExpiryDate - now();
   if (msLeft <= 0) { el.innerText = "Expired"; return; }
   const totalHours = Math.floor(msLeft / 3600000);
   const days       = Math.floor(totalHours / 24);
   const hours      = totalHours % 24;
   const mins       = Math.floor((msLeft % 3600000) / 60000);
-
   if (days > 0) {
     el.innerText = `${days}d ${hours}h remaining`;
   } else {
     el.innerText = `${hours}h ${mins}m remaining`;
-    // Urgent styling when < 24h
     const wrap = document.getElementById("vipCountdownWrap");
     if (wrap) wrap.classList.add("urgent");
   }
 }
-
-// ── Auth state ────────────────────────────────────────────────
-onAuthStateChanged(auth, async user => {
-  currentUser = user || null;
-  vipUnlocked = false;
-  vipExpiryDate = null;
-  if (autoLogoutTimer) clearTimeout(autoLogoutTimer);
-  if (countdownInterval) clearInterval(countdownInterval);
-
-  document.getElementById("vipRequestCard")?.remove();
-
-  if (user) {
-    document.getElementById("authBox").style.display = "none";
-    checkUserVIP();
-  } else {
-    document.getElementById("authBox").style.display = "block";
-  }
-});
 
 function getVipTier(daysRemaining) {
   if (daysRemaining >= 90) return { cls: "diamond", icon: "💎", label: "DIAMOND" };
@@ -1542,166 +1055,187 @@ function buildVipCard(html) {
   document.getElementById("vipBox").appendChild(card);
 }
 
-function checkUserVIP() {
-  if (!currentUser) return;
-  const userRef = doc(db, "users", currentUser.uid);
-  onSnapshot(userRef, async snap => {
-    vipUnlocked = false;
+function clearStoredCode() {
+  localStorage.removeItem("vipCode");
+  localStorage.removeItem("vipWasUnlocked");
+  currentVipCode = null;
+}
+
+// ══════════════════════════════════════════
+// VIP CODE — direct Firestore read + live monitor
+// Ongezo: kila code inafungwa (bind) kwa kifaa cha KWANZA
+// kilichoitumia, kwa kutumia field `redeemedBy` = visitorId.
+// Kifaa kingine chochote kikijaribu kutumia code hiyo hiyo
+// kinakataliwa — soma Firestore rules kwa security halisi.
+// ══════════════════════════════════════════
+function subscribeToCode(code) {
+  if (codeUnsub) codeUnsub();
+  const q = query(collection(db, "vip_codes"), where("code", "==", code));
+  codeUnsub = onSnapshot(q, snap => {
+    vipUnlocked   = false;
     vipExpiryDate = null;
-    if (autoLogoutTimer)  clearTimeout(autoLogoutTimer);
+    if (autoLogoutTimer)   clearTimeout(autoLogoutTimer);
     if (countdownInterval) clearInterval(countdownInterval);
-
     document.getElementById("vipRequestCard")?.remove();
-    if (!snap.exists()) { renderRequestCard(); return; }
-    const data = snap.data();
 
-    if (data.vip === true && data.expiry) {
-      const now      = new Date();
-      const exp      = new Date(data.expiry + "T23:59:59");
-      const msLeft   = exp - now;
-      const daysLeft = Math.ceil(msLeft / 86400000);
+    if (snap.empty) {
+      clearStoredCode();
+      document.getElementById("authBox").style.display = "block";
+      return;
+    }
 
-      if (now <= exp) {
-        vipUnlocked   = true;
-        vipExpiryDate = exp;
-        const tier     = getVipTier(daysLeft);
-        const hoursLeft = Math.floor((msLeft % 86400000) / 3600000);
+    const data = snap.docs[0].data();
+    const n    = now();
+    const exp  = data.expiry ? new Date(data.expiry + "T23:59:59") : null;
+    const myId = getVisitorId();
 
-        // Schedule auto-logout exactly when expiry hits
-        scheduleAutoLogout(exp);
+    // Kifaa kingine kimeshadai code hii — futa kwenye hiki kifaa.
+    if (data.redeemedBy && data.redeemedBy !== myId) {
+      clearStoredCode();
+      document.getElementById("authBox").style.display = "block";
+      showPopup("Code hii sasa inatumika kwenye kifaa kingine ❌");
+      window.dispatchEvent(new Event("vip-status-changed"));
+      return;
+    }
 
-        // Celebration on first unlock
-        if (!localStorage.getItem("vipWasUnlocked")) {
-          localStorage.setItem("vipWasUnlocked", "1");
-          setTimeout(() => { showCelebration(); showToast("🎉 VIP tips unlocked!"); }, 500);
-          addNotification("VIP access activated! Enjoy premium predictions.", "💎");
-        }
+    if (data.active && exp && n <= exp) {
+      vipUnlocked   = true;
+      vipExpiryDate = exp;
+      const daysLeft  = Math.ceil((exp - n) / 86400000);
+      const hoursLeft = Math.floor(((exp - n) % 86400000) / 3600000);
+      const tier      = getVipTier(daysLeft);
 
-        // Build card WITHOUT logout button — auto-logout handles it
-        buildVipCard(`
-          <div class="vip-status-active">
-            <span class="vip-crown">👑</span>
-            <div class="vip-status-title">VIP ACTIVE</div>
-            <div class="vip-expiry">EXPIRES: ${data.expiry}</div>
-            <div class="vip-tier ${tier.cls}">${tier.icon} ${tier.label} MEMBER</div>
-            <div class="vip-days-remaining">
-              <span class="vip-days-num">${daysLeft}</span>
-              day${daysLeft !== 1 ? 's' : ''} &nbsp;·&nbsp; ${hoursLeft}h left
-            </div>
-            <div class="vip-countdown-wrap${daysLeft <= 1 ? ' urgent' : ''}" id="vipCountdownWrap">
-              ⏱ <span id="vipCountdown">calculating...</span>
-            </div>
-            <div class="vip-stat-row">
-              <div class="vip-stat">✅ PREMIUM ACCESS</div>
-              <div class="vip-stat">🔓 UNLOCKED</div>
-            </div>
-          </div>
-        `);
+      scheduleAutoLogout(exp);
+      document.getElementById("authBox").style.display = "none";
 
-        // Start live countdown display
-        startCountdownDisplay();
-
-      } else {
-        // Expired at load time
-        localStorage.removeItem("vipWasUnlocked");
-        await setDoc(userRef, { vip: false }, { merge: true });
-        await signOut(auth);
-        showPopup("VIP expired ❌");
+      if (!localStorage.getItem("vipWasUnlocked")) {
+        localStorage.setItem("vipWasUnlocked", "1");
+        setTimeout(() => { showCelebration(); showToast("🎉 VIP tips unlocked!"); }, 500);
+        addNotification("VIP access activated! Enjoy premium predictions.", "💎");
+        markVisitorVipUnlocked();
       }
+
+      buildVipCard(`
+        <div class="vip-status-active">
+          <span class="vip-crown">👑</span>
+          <div class="vip-status-title">VIP ACTIVE</div>
+          <div class="vip-expiry">EXPIRES: ${data.expiry}</div>
+          <div class="vip-tier ${tier.cls}">${tier.icon} ${tier.label} MEMBER</div>
+          <div class="vip-days-remaining">
+            <span class="vip-days-num">${daysLeft}</span>
+            day${daysLeft !== 1 ? 's' : ''} &nbsp;·&nbsp; ${hoursLeft}h left
+          </div>
+          <div class="vip-countdown-wrap${daysLeft <= 1 ? ' urgent' : ''}" id="vipCountdownWrap">
+            ⏱ <span id="vipCountdown">calculating...</span>
+          </div>
+          <div class="vip-stat-row">
+            <div class="vip-stat">✅ PREMIUM ACCESS</div>
+            <div class="vip-stat">🔓 UNLOCKED</div>
+          </div>
+        </div>
+      `);
+
+      startCountdownDisplay();
+      window.dispatchEvent(new Event("vip-status-changed"));
     } else {
-      localStorage.removeItem("vipWasUnlocked");
-      renderRequestCard();
+      const wasStored = currentVipCode === code;
+      clearStoredCode();
+      document.getElementById("authBox").style.display = "block";
+      if (wasStored) {
+        showPopup(!data.active ? "This VIP code has been disabled ❌" : "This VIP code has expired ⏰");
+      }
+      window.dispatchEvent(new Event("vip-status-changed"));
     }
   });
 }
 
-function renderRequestCard() {
-  buildVipCard(`
-    <div class="vip-request-card">
-      <div style="font-size:36px;margin-bottom:12px;">💎</div>
-      <div class="request-title">UNLOCK VIP ACCESS</div>
-      <div class="request-sub">Get premium predictions every day</div>
-      <div class="email-badge">📧 ${currentUser.email}</div><br>
-      <button class="whatsapp-btn" onclick="goWhatsApp()">💬 REQUEST VIP ON WHATSAPP</button>
-    </div>
-  `);
+function initVipCode() {
+  if (currentVipCode) {
+    subscribeToCode(currentVipCode);
+  } else {
+    document.getElementById("authBox").style.display = "block";
+  }
 }
 
+window.unlockVipCode = async function() {
+  const input = document.getElementById("vipCodeInput");
+  const msgEl = document.getElementById("codeMsg");
+  const btn   = document.getElementById("authBtn");
+  const code  = input.value.trim().toUpperCase();
+
+  if (!code) {
+    msgEl.style.color = "var(--red)";
+    msgEl.innerText = "Please enter a VIP code first";
+    return;
+  }
+
+  btn.disabled = true; btn.innerText = "CHECKING…";
+  msgEl.style.color = "rgba(255,255,255,.4)";
+  msgEl.innerText = "";
+
+  try {
+    const q = query(collection(db, "vip_codes"), where("code", "==", code));
+    const snap = await getDocs(q);
+
+    if (snap.empty) {
+      msgEl.style.color = "var(--red)";
+      msgEl.innerText = "Invalid code ❌";
+    } else {
+      const codeDoc = snap.docs[0];
+      const data    = codeDoc.data();
+      const n       = now();
+      const exp     = data.expiry ? new Date(data.expiry + "T23:59:59") : null;
+      const myId    = getVisitorId();
+
+      if (!data.active) {
+        msgEl.style.color = "var(--red)";
+        msgEl.innerText = "This code has been disabled ❌";
+      } else if (!exp || n > exp) {
+        msgEl.style.color = "var(--red)";
+        msgEl.innerText = "This code has expired ⏰";
+      } else if (data.redeemedBy && data.redeemedBy !== myId) {
+        // Code hii tayari imetumika kwenye kifaa kingine
+        msgEl.style.color = "var(--red)";
+        msgEl.innerText = "Code hii tayari imetumika kwenye kifaa kingine ❌";
+      } else {
+        try {
+          // Dai (claim) code hii kwa kifaa hiki iwapo bado haijadaiwa.
+          // Firestore rules ndio "hakimu" halisi — kama kifaa kingine
+          // kimeshaidai kabla ya hii kufika, update hii itakataliwa.
+          if (!data.redeemedBy) {
+            await updateDoc(codeDoc.ref, { redeemedBy: myId, redeemedAt: n.toISOString() });
+          }
+          localStorage.setItem("vipCode", code);
+          currentVipCode = code;
+          msgEl.style.color = "var(--green)";
+          msgEl.innerText = "Code accepted ✅ Unlocking…";
+          subscribeToCode(code);
+        } catch (claimErr) {
+          console.error("claim failed:", claimErr.code, claimErr.message);
+          msgEl.style.color = "var(--red)";
+          msgEl.innerText = "Code hii tayari imetumika ❌";
+        }
+      }
+    }
+  } catch (e) {
+    console.error("unlockVipCode failed:", e.code, e.message);
+    msgEl.style.color = "var(--red)";
+    msgEl.innerText = "Error: " + (e.message || "please try again");
+  }
+
+  btn.disabled = false; btn.innerText = "UNLOCK VIP";
+};
+
 window.goWhatsApp = function() {
-  if (!currentUser) { showPopup("Login first"); return; }
-  const msg = `Hello 👋\n\nI want VIP access 💎\n\nUID:\n${currentUser.uid}\n\nEmail:\n${currentUser.email}`;
+  let msg;
+  if (selectedPlan) {
+    msg = `Hello 👋\n\nI would like to buy a VIP code 💎 for MATCHES VIP.\n\nPlan selected: ${selectedPlan.label} — Tsh ${selectedPlan.price}\n\nPlease send me payment instructions.`;
+  } else {
+    msg = `Hello 👋\n\nI would like to get a VIP code 💎 for MATCHES VIP.\n\nPlease send me access.`;
+  }
   window.open(`https://wa.me/255743507691?text=${encodeURIComponent(msg)}`, "_blank");
 };
 
-// ── Auth actions ──────────────────────────────────────────────
-window.loginUser = async function() {
-  const email    = document.getElementById("email").value.trim();
-  const password = document.getElementById("password").value.trim();
-  try {
-    const cred = await signInWithEmailAndPassword(auth, email, password);
-    if (!cred.user.emailVerified) {
-      await signOut(auth);
-      showPopup("Verify your email first 📩");
-      return;
-    }
-    document.getElementById("authBox").style.display = "none";
-    showPopup("Login successful ✅");
-  } catch (e) {
-    const msgs = {
-      "auth/user-not-found":     "Account not found",
-      "auth/wrong-password":     "Wrong password",
-      "auth/invalid-credential": "Wrong email or password"
-    };
-    showPopup(msgs[e.code] || "Login failed");
-  }
-};
-
-window.signupUser = async function() {
-  const email    = document.getElementById("email").value.trim();
-  const password = document.getElementById("password").value.trim();
-  if (password.length < 6) { showPopup("Password must be at least 6 characters"); return; }
-  try {
-    const cred = await createUserWithEmailAndPassword(auth, email, password);
-    await sendEmailVerification(cred.user);
-    await setDoc(doc(db, "users", cred.user.uid), {
-      email,
-      uid: cred.user.uid,
-      vip: false,
-      expiry: "",
-      createdAt: new Date().toISOString()
-    });
-    showPopup("Account created ✅ Verify email first.");
-    await signOut(auth);
-  } catch (e) {
-    const msgs = {
-      "auth/email-already-in-use": "Email already registered 📩",
-      "auth/invalid-email":        "Invalid email ❌",
-      "auth/weak-password":        "Weak password 🔑"
-    };
-    showPopup(msgs[e.code] || "Something went wrong");
-  }
-};
-
-window.toggleAuth = function() {
-  isLogin = !isLogin;
-  document.getElementById("authTitle").innerText  = isLogin ? "LOGIN"          : "SIGN UP";
-  document.getElementById("authBtn").innerText    = isLogin ? "LOGIN"          : "CREATE ACCOUNT";
-  document.getElementById("switchAuth").innerText = isLogin ? "Create account" : "Already have account?";
-  document.getElementById("authBtn").onclick      = isLogin ? loginUser        : signupUser;
-};
-
-window.resetPassword = async function() {
-  const email = document.getElementById("email").value.trim();
-  if (!email) { showPopup("Enter email first 📩"); return; }
-  try {
-    await sendPasswordResetEmail(auth, email);
-    showPopup("Password reset email sent ✅");
-  } catch (e) {
-    showPopup(e.code || e.message || "Reset failed ❌");
-  }
-};
-
-// ── Match logic ───────────────────────────────────────────────
 function getStatus(m) {
   if (!m.ft || m.ft === "???" || !m.ft.includes("-")) return "pending";
   const [home, away] = m.ft.split("-").map(Number);
@@ -1751,18 +1285,17 @@ function getStatus(m) {
 }
 
 function getCountdownLabel(matchTime) {
-  const diff = matchTime - new Date();
+  const diff = matchTime - now();
   if (diff > 0) {
     const hrs  = Math.floor(diff / 3600000);
     const mins = Math.floor((diff % 3600000) / 60000);
     return `⏳ ${hrs}h ${mins}m`;
   }
-  // Removed LIVE status — just show time
   return "FT";
 }
 
 function getRowStyle(matchTime) {
-  const diff = matchTime - new Date();
+  const diff = matchTime - now();
   if (diff > 0) return "border-left:3px solid #00e87a;";
   return "opacity:0.6;";
 }
@@ -1776,17 +1309,15 @@ function buildRow(m, matchTime, isFree) {
   const status  = getStatus(m);
   const countdown = getCountdownLabel(matchTime);
   const oddVal  = parseFloat(m.odd) || 1;
-  // VIP security: only unlock if user has valid VIP
   const locked  = !isFree && !vipUnlocked;
 
   const matchName = locked ? "🔒 VIP GAME" : m.match;
-  const tipClass  = isFree ? "free" : (locked ? "vip-lock" : "vip-lock");
+  const tipClass  = isFree ? "free" : "vip-lock";
 
   let tipHTML;
   if (isFree) {
     tipHTML = m.tip;
   } else if (locked) {
-    // Security: double-blur and no hint of content
     tipHTML = `<span class="vip-lock-overlay">🔒 VIP ONLY</span>`;
   } else {
     tipHTML = `<span class="vip-premium">${m.tip}</span>${m.tipType === "corners" && m.corners ? `<br><small style="color:rgba(255,255,255,.4);">🚩 ${m.corners}</small>` : ""}`;
@@ -1806,14 +1337,21 @@ function buildRow(m, matchTime, isFree) {
   `, status, oddVal };
 }
 
-const todayQuery = query(collection(db, "matches"), where("date", "==", date));
+let latestFreeMatches = [];
+let latestVipMatches  = [];
+let freeLoaded = false;
+let vipLoaded  = false;
 
-onSnapshot(todayQuery, snapshot => {
-  const rows = [];
-  snapshot.forEach(docSnap => {
-    const m         = docSnap.data();
-    const matchTime = buildMatchTime(m.date, m.time);
-    const diff      = matchTime - new Date();
+function processTodayMatches() {
+  if (!freeLoaded || !vipLoaded) return;
+
+  const rows = [...latestFreeMatches, ...latestVipMatches].map(m => ({
+    m,
+    matchTime: buildMatchTime(m.date, m.time)
+  }));
+
+  rows.forEach(({ m, matchTime }) => {
+    const diff = matchTime - now();
     if (diff > 0 && diff <= 600000) {
       const isVipOnly = (m.type || "vip") !== "free";
       if (!isVipOnly || vipUnlocked) {
@@ -1826,7 +1364,6 @@ onSnapshot(todayQuery, snapshot => {
         }
       }
     }
-    rows.push({ m, matchTime });
   });
 
   rows.sort((a, b) => a.matchTime - b.matchTime);
@@ -1840,7 +1377,6 @@ onSnapshot(todayQuery, snapshot => {
     const isFree = (m.type || "vip") === "free";
     const { html, status, oddVal } = buildRow(m, matchTime, isFree);
 
-    // Notifications for results (VIP only when unlocked)
     if (!isFree && vipUnlocked) {
       const key = "result_" + m.match + m.time;
       if (status !== "pending" && !notifiedMatches[key]) {
@@ -1913,39 +1449,79 @@ onSnapshot(todayQuery, snapshot => {
 
   document.getElementById("globalStreak").innerText = Math.max(freeStreakCount, vipStreakCount);
 
+  document.getElementById("freeStreakBar").style.display = freeStreakCount > 0 ? "flex" : "none";
   if (freeStreakCount > 0) {
-    document.getElementById("freeStreakBar").style.display = "flex";
     document.getElementById("freeStreakNum").innerText = freeStreakCount;
     document.getElementById("freeStreakSub").innerText = `${freeStreakCount} consecutive win${freeStreakCount>1?'s':''} today 🔥`;
   }
+  document.getElementById("vipStreakBar").style.display = vipStreakCount > 0 ? "flex" : "none";
   if (vipStreakCount > 0) {
-    document.getElementById("vipStreakBar").style.display = "flex";
     document.getElementById("vipStreakNum").innerText = vipStreakCount;
     document.getElementById("vipStreakSub").innerText = `${vipStreakCount} consecutive win${vipStreakCount>1?'s':''} today 🏆`;
   }
-});
+}
 
-// ── History ────────────────────────────────────────────────────
-onSnapshot(collection(db, "matches"), snapshot => {
+function startFreeMatchesListener() {
+  const todayFreeQuery = query(collection(db, "matches_free"), where("date", "==", date));
+  onSnapshot(todayFreeQuery, snapshot => {
+    latestFreeMatches = [];
+    snapshot.forEach(docSnap => latestFreeMatches.push({ ...docSnap.data(), type: "free" }));
+    freeLoaded = true;
+    processTodayMatches();
+  });
+}
+
+function startVipMatchesListener() {
+  const todayVipQuery = query(collection(db, "matches_vip"), where("date", "==", date));
+  onSnapshot(todayVipQuery, snapshot => {
+    latestVipMatches = [];
+    snapshot.forEach(docSnap => latestVipMatches.push({ ...docSnap.data(), type: "vip" }));
+    vipLoaded = true;
+    processTodayMatches();
+  });
+}
+
+window.addEventListener("vip-status-changed", () => processTodayMatches());
+
+let latestFreeAll = null;
+let latestVipAll  = null;
+
+function isPastDate(dStr) {
+  const [d, mo, y] = dStr.split(".").map(Number);
+  const matchDay = new Date(y, mo - 1, d);
+  const n = now();
+  const todayDay = new Date(n.getFullYear(), n.getMonth(), n.getDate());
+  return matchDay < todayDay;
+}
+
+function processHistory() {
+  if (!latestFreeAll || !latestVipAll) return;
+
   const freeGroups = {}, vipGroups = {};
-  const past = [];
-  snapshot.forEach(docSnap => {
+
+  latestFreeAll.forEach(docSnap => {
     const m = docSnap.data();
     if (m.date === date) return;
-    past.push(m);
+    if (!isPastDate(m.date)) return;
+    if (!freeGroups[m.date]) freeGroups[m.date] = [];
+    freeGroups[m.date].push(m);
   });
-  past.sort((a, b) => {
+
+  latestVipAll.forEach(docSnap => {
+    const m = docSnap.data();
+    if (m.date === date) return;
+    if (!isPastDate(m.date)) return;
+    if (!vipGroups[m.date]) vipGroups[m.date] = [];
+    vipGroups[m.date].push(m);
+  });
+
+  function sortGroupsByDateDesc(groups) {
     const toISO = d => d.split(".").reverse().join("-");
-    return new Date(toISO(b.date)) - new Date(toISO(a.date));
-  });
-  past.forEach(m => {
-    const type = m.type || "vip";
-    const grp  = type === "free" ? freeGroups : vipGroups;
-    if (!grp[m.date]) grp[m.date] = [];
-    grp[m.date].push(m);
-  });
+    return Object.keys(groups).sort((a, b) => new Date(toISO(b)) - new Date(toISO(a)));
+  }
+
   function buildHistoryHTML(groups, tipClass) {
-    const keys = Object.keys(groups);
+    const keys = sortGroupsByDateDesc(groups);
     if (keys.length === 0) return '<div class="empty-state"><div class="e-icon">📋</div><h3>NO HISTORY YET</h3><p>Past results will appear here</p></div>';
     return keys.map(d => {
       const rows = groups[d].map(m => `
@@ -1968,26 +1544,38 @@ onSnapshot(collection(db, "matches"), snapshot => {
       `;
     }).join("");
   }
+
   document.getElementById("historyFree").innerHTML = buildHistoryHTML(freeGroups, "free");
   document.getElementById("historyVip").innerHTML  = buildHistoryHTML(vipGroups,  "vip-lock");
-});
+}
 
-// ── Countdown refresh ──────────────────────────────────────────
-setInterval(() => {
-  document.querySelectorAll("#freeSection tbody tr, #vipSection tbody tr").forEach(row => {
-    const timeText   = row.children[0].innerText;
-    if (timeText === "--:--") return;
-    const matchTime  = buildMatchTime(date, timeText);
-    const statusCell = row.children[4];
-    const ft         = statusCell.firstChild?.textContent?.trim() || "";
-    const status     = getStatus({ ft, tip: row.children[2]?.innerText || "" });
-    if (status === "pending") {
-      statusCell.innerHTML = `${ft}<small>${getCountdownLabel(matchTime)}</small>`;
-    }
+function startHistoryListeners() {
+  onSnapshot(collection(db, "matches_free"), snapshot => {
+    latestFreeAll = snapshot.docs;
+    processHistory();
   });
-}, 30000);
+  onSnapshot(collection(db, "matches_vip"), snapshot => {
+    latestVipAll = snapshot.docs;
+    processHistory();
+  });
+}
 
-// ── Pull to refresh ────────────────────────────────────────────
+function startCountdownRefresh() {
+  setInterval(() => {
+    document.querySelectorAll("#freeSection tbody tr, #vipSection tbody tr").forEach(row => {
+      const timeText   = row.children[0].innerText;
+      if (timeText === "--:--") return;
+      const matchTime  = buildMatchTime(date, timeText);
+      const statusCell = row.children[4];
+      const ft         = statusCell.firstChild?.textContent?.trim() || "";
+      const status     = getStatus({ ft, tip: row.children[2]?.innerText || "" });
+      if (status === "pending") {
+        statusCell.innerHTML = `${ft}<small>${getCountdownLabel(matchTime)}</small>`;
+      }
+    });
+  }, 30000);
+}
+
 let touchStartY = 0;
 let touching    = false;
 const ptrEl     = document.getElementById("ptrIndicator");
@@ -2014,6 +1602,20 @@ document.addEventListener("touchend", () => {
   }
   touching = false;
 });
+
+async function initApp() {
+  await syncServerTime();
+  computeDateFromNow();
+  startDateRolloverWatcher();
+  startFreeMatchesListener();
+  startVipMatchesListener();
+  startHistoryListeners();
+  startCountdownRefresh();
+  initVipCode();
+  trackVisit();
+  startVisitorHeartbeat();
+}
+initApp();
 </script>
 </body>
 </html>
