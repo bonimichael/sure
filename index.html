@@ -35,24 +35,24 @@ html{scroll-behavior:smooth;}
   color-scheme: dark;
 }
 :root[data-theme="light"]{
-  --bg:        #F2F4F8;
-  --surface:   #FFFFFF;
-  --surface-2: #F7F8FB;
-  --surface-3: #ECEFF5;
-  --line:      rgba(15,20,35,0.09);
-  --line-soft: rgba(15,20,35,0.05);
-  --pitch:     #147A4E;
-  --pitch-dim: rgba(20,122,78,0.10);
-  --gold:      #A9760F;
-  --gold-dim:  rgba(169,118,15,0.10);
-  --coral:     #D33C3F;
-  --coral-dim: rgba(211,60,63,0.10);
-  --sky:       #1E70B8;
-  --sky-dim:   rgba(30,112,184,0.10);
-  --ink:       #151A26;
-  --slate:     #5B6478;
-  --slate-dim: #98A0B2;
-  --shadow:    0 12px 32px rgba(20,25,40,0.10);
+  --bg:        #E4E2DA;
+  --surface:   #F6F4EC;
+  --surface-2: #EEECE2;
+  --surface-3: #E2DFD3;
+  --line:      rgba(32,28,20,0.12);
+  --line-soft: rgba(32,28,20,0.07);
+  --pitch:     #0F6A48;
+  --pitch-dim: rgba(15,106,72,0.12);
+  --gold:      #8C6410;
+  --gold-dim:  rgba(140,100,16,0.12);
+  --coral:     #B23538;
+  --coral-dim: rgba(178,53,56,0.12);
+  --sky:       #1B5D91;
+  --sky-dim:   rgba(27,93,145,0.12);
+  --ink:       #23201A;
+  --slate:     #5C574B;
+  --slate-dim: #918B7A;
+  --shadow:    0 8px 22px rgba(30,26,18,0.09);
   --scoreboard-bg: #10151F;
   color-scheme: light;
 }
@@ -421,6 +421,17 @@ body{
 .hist-tab.on-free{border-color:rgba(82,168,234,.4);background:var(--sky-dim);color:var(--sky);}
 .hist-tab.on-vip{border-color:rgba(224,178,74,.4);background:var(--gold-dim);color:var(--gold);}
 
+.hist-pager{display:flex;justify-content:center;align-items:center;gap:10px;margin:16px 0 4px;}
+.hist-pager-btn{
+  padding:11px 22px;border-radius:30px;border:1px solid var(--line);background:var(--surface-2);color:var(--ink);
+  font-family:'Space Grotesk',sans-serif;font-size:clamp(12px,2.8vw,14px);font-weight:700;letter-spacing:.03em;
+  cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:6px;
+}
+.hist-pager-btn:hover:not(:disabled){border-color:var(--gold);}
+.hist-pager-btn:active:not(:disabled){transform:scale(.96);}
+.hist-pager-btn:disabled{opacity:.3;cursor:not-allowed;}
+.hist-page-label{font-family:'JetBrains Mono',monospace;font-size:11px;opacity:.5;letter-spacing:.06em;text-align:center;margin-bottom:6px;}
+
 /* ══════════════════ BOTTOM NAV ══════════════════ */
 .bottom-nav{
   position:fixed;bottom:0;left:0;right:0;background:color-mix(in srgb, var(--bg) 92%, transparent);
@@ -679,7 +690,7 @@ function applyTheme(mode) {
   document.documentElement.setAttribute("data-theme", mode);
   document.getElementById("themeKnob").innerText = mode === "light" ? "☀" : "🌙";
   const meta = document.querySelector('meta[name="theme-color"]');
-  if (meta) meta.setAttribute("content", mode === "light" ? "#F2F4F8" : "#0A0E15");
+  if (meta) meta.setAttribute("content", mode === "light" ? "#E4E2DA" : "#0A0E15");
   localStorage.setItem("theme", mode);
 }
 window.toggleTheme = function() {
@@ -1608,6 +1619,11 @@ window.addEventListener("vip-status-changed", () => processTodayMatches());
 let latestFreeAll = null;
 let latestVipAll  = null;
 
+// History pagination: one date shown at a time, per tab
+let freeHistGroups = {}, vipHistGroups = {};
+let freeHistDates  = [], vipHistDates  = [];
+let freeHistPage   = 0,  vipHistPage   = 0;
+
 function isPastDate(dStr) {
   const [d, mo, y] = dStr.split(".").map(Number);
   const matchDay = new Date(y, mo - 1, d);
@@ -1615,6 +1631,94 @@ function isPastDate(dStr) {
   const todayDay = new Date(n.getFullYear(), n.getMonth(), n.getDate());
   return matchDay < todayDay;
 }
+
+function sortDatesDesc(groups) {
+  const toISO = d => d.split(".").reverse().join("-");
+  return Object.keys(groups).sort((a, b) => new Date(toISO(b)) - new Date(toISO(a)));
+}
+
+function buildHistoryCard(m, isFree) {
+  const status = getStatus(m);
+  const tipClass = isFree ? "free" : "vip-lock";
+  const teams = splitTeams(m.match);
+  const hasFt = m.ft && m.ft !== "???" && m.ft.includes("-");
+
+  let teamsHTML;
+  if (teams) {
+    const scoreHTML = hasFt
+      ? `<span class="score-digits ${status === 'win' ? 'win' : status === 'lost' ? 'lost' : ''}">${escapeHtml(m.ft)}</span>`
+      : `<span class="match-vs">VS</span>`;
+    teamsHTML = `
+      <div class="match-teams">
+        <span class="match-team home">${escapeHtml(teams.home)}</span>
+        ${scoreHTML}
+        <span class="match-team away">${escapeHtml(teams.away)}</span>
+      </div>`;
+  } else {
+    const ftSuffix = hasFt ? ` <span style="opacity:.5;font-family:'JetBrains Mono',monospace;">(${escapeHtml(m.ft)})</span>` : "";
+    teamsHTML = `<div class="match-single-name">${escapeHtml(m.match)}${ftSuffix}</div>`;
+  }
+
+  const badge = status === "win" ? `<span class="badge win">✅ WON</span>`
+              : status === "lost" ? `<span class="badge lost">❌ LOST</span>`
+              : `<span class="badge pending">⏳ PENDING</span>`;
+
+  return `
+    <div class="match-card ${status === 'win' ? 'is-win' : status === 'lost' ? 'is-lost' : ''}">
+      <div class="match-head">
+        <span class="match-time">${escapeHtml(m.time || "--:--")}</span>
+        ${badge}
+      </div>
+      <div class="match-body">${teamsHTML}</div>
+      <div class="match-tip-bar">
+        <div>
+          <span class="tip-label ${tipClass}">${escapeHtml(m.tip)}</span>
+          ${buildTipNote(m)}
+        </div>
+        <span class="odd-badge">${escapeHtml(m.odd)}</span>
+      </div>
+    </div>`;
+}
+
+// Renders ONE date's worth of history + pager controls (Prev = newer, Next = older)
+function renderHistoryPage(type) {
+  const isFree   = type === "free";
+  const groups   = isFree ? freeHistGroups : vipHistGroups;
+  const dates    = isFree ? freeHistDates  : vipHistDates;
+  const pageIdx  = isFree ? freeHistPage   : vipHistPage;
+  const targetEl = document.getElementById(isFree ? "historyFree" : "historyVip");
+
+  if (dates.length === 0) {
+    targetEl.innerHTML = '<div class="empty-state"><div class="e-icon">📋</div><h3>No history yet</h3><p>Past results will appear here</p></div>';
+    return;
+  }
+
+  const clamped = Math.min(Math.max(pageIdx, 0), dates.length - 1);
+  if (isFree) freeHistPage = clamped; else vipHistPage = clamped;
+
+  const d = dates[clamped];
+  const matches = groups[d];
+
+  targetEl.innerHTML = `
+    <div class="hist-page-label">Page ${clamped + 1} of ${dates.length}</div>
+    <div class="date-group">📅 ${d}</div>
+    <div class="match-list">
+      ${matches.map(m => buildHistoryCard(m, isFree)).join("")}
+    </div>
+    <div class="hist-pager">
+      <button class="hist-pager-btn" onclick="changeHistoryPage('${type}', -1)" ${clamped === 0 ? "disabled" : ""}>‹ Prev Page</button>
+      <button class="hist-pager-btn" onclick="changeHistoryPage('${type}', 1)" ${clamped === dates.length - 1 ? "disabled" : ""}>Next Page ›</button>
+    </div>
+  `;
+}
+
+window.changeHistoryPage = function(type, delta) {
+  if (type === "free") freeHistPage += delta; else vipHistPage += delta;
+  renderHistoryPage(type);
+  navigator.vibrate?.([10]);
+  document.getElementById(type === "free" ? "historyFreeWrap" : "historyVipWrap")
+    ?.scrollIntoView({ behavior: "smooth", block: "start" });
+};
 
 function processHistory() {
   if (!latestFreeAll || !latestVipAll) return;
@@ -1637,67 +1741,13 @@ function processHistory() {
     vipGroups[m.date].push(m);
   });
 
-  function sortGroupsByDateDesc(groups) {
-    const toISO = d => d.split(".").reverse().join("-");
-    return Object.keys(groups).sort((a, b) => new Date(toISO(b)) - new Date(toISO(a)));
-  }
+  freeHistGroups = freeGroups;
+  vipHistGroups  = vipGroups;
+  freeHistDates  = sortDatesDesc(freeGroups);
+  vipHistDates   = sortDatesDesc(vipGroups);
 
-  function buildHistoryCard(m, isFree) {
-    const status = getStatus(m);
-    const tipClass = isFree ? "free" : "vip-lock";
-    const teams = splitTeams(m.match);
-    const hasFt = m.ft && m.ft !== "???" && m.ft.includes("-");
-
-    let teamsHTML;
-    if (teams) {
-      const scoreHTML = hasFt
-        ? `<span class="score-digits ${status === 'win' ? 'win' : status === 'lost' ? 'lost' : ''}">${escapeHtml(m.ft)}</span>`
-        : `<span class="match-vs">VS</span>`;
-      teamsHTML = `
-        <div class="match-teams">
-          <span class="match-team home">${escapeHtml(teams.home)}</span>
-          ${scoreHTML}
-          <span class="match-team away">${escapeHtml(teams.away)}</span>
-        </div>`;
-    } else {
-      const ftSuffix = hasFt ? ` <span style="opacity:.5;font-family:'JetBrains Mono',monospace;">(${escapeHtml(m.ft)})</span>` : "";
-      teamsHTML = `<div class="match-single-name">${escapeHtml(m.match)}${ftSuffix}</div>`;
-    }
-
-    const badge = status === "win" ? `<span class="badge win">✅ WON</span>`
-                : status === "lost" ? `<span class="badge lost">❌ LOST</span>`
-                : `<span class="badge pending">⏳ PENDING</span>`;
-
-    return `
-      <div class="match-card ${status === 'win' ? 'is-win' : status === 'lost' ? 'is-lost' : ''}">
-        <div class="match-head">
-          <span class="match-time">${escapeHtml(m.time || "--:--")}</span>
-          ${badge}
-        </div>
-        <div class="match-body">${teamsHTML}</div>
-        <div class="match-tip-bar">
-          <div>
-            <span class="tip-label ${tipClass}">${escapeHtml(m.tip)}</span>
-            ${buildTipNote(m)}
-          </div>
-          <span class="odd-badge">${escapeHtml(m.odd)}</span>
-        </div>
-      </div>`;
-  }
-
-  function buildHistoryHTML(groups, isFree) {
-    const keys = sortGroupsByDateDesc(groups);
-    if (keys.length === 0) return '<div class="empty-state"><div class="e-icon">📋</div><h3>No history yet</h3><p>Past results will appear here</p></div>';
-    return keys.map(d => `
-      <div class="date-group">📅 ${d}</div>
-      <div class="match-list">
-        ${groups[d].map(m => buildHistoryCard(m, isFree)).join("")}
-      </div>
-    `).join("");
-  }
-
-  document.getElementById("historyFree").innerHTML = buildHistoryHTML(freeGroups, true);
-  document.getElementById("historyVip").innerHTML  = buildHistoryHTML(vipGroups,  false);
+  renderHistoryPage("free");
+  renderHistoryPage("vip");
 }
 
 function startHistoryListeners() {
