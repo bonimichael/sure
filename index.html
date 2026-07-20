@@ -1939,6 +1939,16 @@ function renderGroupedByLeague(builtRows, isVip) {
   return builtRows.map(row => {
     const timeLabel = row.m.time || "--:--";
     if (isVip) {
+      if (vipUnlocked) {
+        // Baada ya kufunguliwa: onyesha jina halisi la league, si "VIP MATCH"
+        const league = buildLeagueLabel(row.m) || "OTHER MATCHES";
+        return `
+          <div class="league-group">
+            ${buildLeagueHeader(league, timeLabel, row.status)}
+            <div class="match-list">${row.styledHtml}</div>
+          </div>`;
+      }
+      // Bado limefungwa: onyesha "VIP MATCH" generic ili lisifichue league
       return `
         <div class="league-group">
           ${buildVipHeader(timeLabel, row.status)}
