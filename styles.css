@@ -77,6 +77,52 @@ body{
 .disp{font-family:'Space Grotesk',sans-serif;}
 .mono{font-family:'JetBrains Mono',monospace;}
 
+/* ══════════════════ SPLASH SCREEN ══════════════════ */
+#splashScreen{
+  position:fixed;inset:0;z-index:99999;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  background:
+    radial-gradient(circle at 50% 32%, color-mix(in srgb, var(--gold) 10%, transparent), transparent 60%),
+    var(--bg);
+  transition:opacity .5s ease;
+}
+#splashScreen.hide{opacity:0;pointer-events:none;}
+.splash-mark{
+  width:76px;height:76px;border-radius:20px;flex-shrink:0;
+  background:linear-gradient(155deg, var(--gold), #a9760f);
+  display:flex;align-items:center;justify-content:center;
+  font-size:34px;font-weight:800;color:#0A0E15;
+  font-family:'Space Grotesk',sans-serif;
+  box-shadow:0 12px 32px rgba(224,178,74,0.35);
+  animation:splashPulse 1.7s ease-in-out infinite;
+}
+.splash-title{
+  margin-top:18px;font-family:'Space Grotesk',sans-serif;font-weight:800;
+  font-size:19px;letter-spacing:.09em;color:var(--ink);
+  animation:splashFadeUp .6s ease both .1s;
+}
+.splash-sub{
+  margin-top:6px;font-family:'JetBrains Mono',monospace;font-size:10px;
+  letter-spacing:.16em;text-transform:uppercase;opacity:.4;
+  animation:splashFadeUp .6s ease both .2s;
+}
+.splash-loader{
+  margin-top:28px;width:120px;height:3px;border-radius:3px;
+  background:var(--surface-2);overflow:hidden;position:relative;
+  animation:splashFadeUp .6s ease both .3s;
+}
+.splash-loader::after{
+  content:'';position:absolute;top:0;left:-40%;width:40%;height:100%;
+  background:linear-gradient(90deg, transparent, var(--gold), transparent);
+  animation:splashLoad 1.15s ease-in-out infinite;
+}
+@keyframes splashPulse{0%,100%{transform:scale(1);}50%{transform:scale(1.07);}}
+@keyframes splashLoad{0%{left:-40%;}100%{left:100%;}}
+@keyframes splashFadeUp{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
+@media (prefers-reduced-motion: reduce){
+  .splash-mark, .splash-loader::after{animation:none;}
+}
+
 /* ══════════════════ TOPBAR ══════════════════ */
 .topbar{
   display:flex;justify-content:space-between;align-items:center;
