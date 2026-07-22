@@ -232,6 +232,18 @@ function getVisitorId() {
   return currentUid;
 }
 
+// ══════════════════════════════════════════
+// FIX: trackVisit() sasa ndiyo "chanzo kimoja cha ukweli" cha kuunda doc
+// mpya ya analytics_visitors. Awali kulikuwa na "race condition" kati ya
+// trackVisit() (isiyosubiriwa/await) na saveIdentity() (inayoitwa mara
+// mtumiaji akijaza fomu haraka). Kama saveIdentity() ndiyo iliyofika
+// kwanza, ilikuwa inaunda doc bila fields firstSeen/lastSeen/visits/
+// daysActive — ndiyo maana Admin Panel ilionyesha "N/A" na "0 visits".
+//
+// Sasa: (1) initApp() inasubiri (await) trackVisit() kabla ya kuonyesha
+// modal ya jina/email, na (2) saveIdentity() ina "fallback" salama —
+// ikiwa doc bado haipo itaunda moja kamili yenye fields zote.
+// ══════════════════════════════════════════
 async function trackVisit() {
   try {
     const visitorId = getVisitorId();
@@ -252,15 +264,22 @@ async function trackVisit() {
         ...(identity ? { name: identity.name, email: identity.email } : {})
       }, { merge: true });
     } else {
+      // FIX (Firestore rules): rule ya "create" kwenye analytics_visitors
+      // ina hasOnly(['firstSeen','lastSeen','lastDate','visits',
+      // 'daysActive','name','email']) — 'vipUnlockedEver' HAIPO kwenye
+      // orodha hiyo (imekusudiwa, ili mtumiaji asijipe VIP mwenyewe kwa
+      // console ya browser). Kuandika field hiyo humu kulikuwa
+      // kinasababisha hasOnly() i-fail na create() NZIMA ikatalike kimya
+      // kimya kila wakati kwa mtumiaji mpya — ndiyo chanzo halisi cha
+      // doc "chapa" (N/A / 0 visits). Sasa haitumiki humu kabisa.
       await setDoc(ref, {
-        firstSeen:       nowISO,
-        lastSeen:        nowISO,
-        lastDate:        date,
-        visits:          1,
-        daysActive:      1,
-        vipUnlockedEver: false,
-        name:            identity ? identity.name  : null,
-        email:           identity ? identity.email : null
+        firstSeen:  nowISO,
+        lastSeen:   nowISO,
+        lastDate:   date,
+        visits:     1,
+        daysActive: 1,
+        name:       identity ? identity.name  : null,
+        email:      identity ? identity.email : null
       }, { merge: true });
     }
   } catch (e) {
@@ -281,31 +300,44 @@ function showIdentityModalIfNeeded() {
     setTimeout(() => document.getElementById("identityName")?.focus(), 200);
   }
 }
+
+// FIX: saveIdentity() sasa inaangalia kwanza kama doc ya analytics_visitors
+// tayari ipo. Ikiwa haipo (mfano trackVisit() bado haijamaliza, au
+// imeshindwa kwa sababu fulani), inaunda doc KAMILI yenye fields zote
+// (firstSeen, lastSeen, visits, daysActive, n.k.) badala ya kuunda doc
+// "chapa" yenye jina/email tu — hii ndiyo iliyosababisha "N/A" kwenye
+// Admin Panel kwa baadhi ya watumiaji.
 async function saveIdentity(name, email) {
   const identity = { name, email: email || null, savedAt: now().toISOString() };
   localStorage.setItem("userIdentity", JSON.stringify(identity));
   try {
-    const ref  = doc(db, "analytics_visitors", getVisitorId());
+    const visitorId = getVisitorId();
+    if (!visitorId) return;
+    const ref  = doc(db, "analytics_visitors", visitorId);
     const snap = await getDoc(ref).catch(() => null);
+    const nowISO = now().toISOString();
 
     if (snap && snap.exists()) {
       await setDoc(ref, { name, email: email || null }, { merge: true });
     } else {
-      const nowISO = now().toISOString();
+      // FIX (Firestore rules): sawa na trackVisit() — 'vipUnlockedEver'
+      // haipo kwenye hasOnly() ya rule ya create, hivyo lazima iondolewe
+      // hapa pia ili create() isikatike kimya kimya.
       await setDoc(ref, {
-        firstSeen: nowISO,
-        lastSeen: nowISO,
-        lastDate: date,
-        visits: 1,
+        firstSeen:  nowISO,
+        lastSeen:   nowISO,
+        lastDate:   date,
+        visits:     1,
         daysActive: 1,
-        vipUnlockedEver: false,
-        name, email: email || null
+        name,
+        email: email || null
       }, { merge: true });
     }
   } catch (e) {
     console.warn("Could not save identity to server:", e.message);
   }
 }
+
 window.submitIdentity = async function() {
   const nameEl  = document.getElementById("identityName");
   const emailEl = document.getElementById("identityEmail");
@@ -1529,6 +1561,14 @@ function startTrustStatsListener() {
   }, () => renderTrustStrip({}));
 }
 
+// ══════════════════════════════════════════
+// FIX: trackVisit() sasa inasubiriwa (await) KABLA ya
+// showIdentityModalIfNeeded(). Hii ndiyo sehemu kuu ya fix ya
+// tatizo la "N/A" / "0 visits" kwenye Admin Panel — inahakikisha
+// doc ya analytics_visitors imeshakamilika kuundwa/kusasishwa
+// (ikiwa na firstSeen, lastSeen, visits, daysActive) kabla
+// mtumiaji hajapata nafasi ya kujaza fomu ya jina/email.
+// ══════════════════════════════════════════
 async function initApp() {
   await ensureAnonAuth();
   startBlockedWatcher();
@@ -1542,7 +1582,7 @@ async function initApp() {
   startCountdownRefresh();
   startTrustStatsListener();
   initVipCode();
-  trackVisit();
+  await trackVisit();
   startVisitorHeartbeat();
   showIdentityModalIfNeeded();
 }
