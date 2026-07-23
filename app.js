@@ -551,12 +551,9 @@ function getVipTier(daysRemaining) {
 }
 
 function buildVipCard(html) {
-  document.getElementById("vipRequestCard")?.remove();
-  const card = document.createElement("div");
-  card.id = "vipRequestCard";
-  card.style.cssText = "max-width:520px;margin:0 auto 20px;";
-  card.innerHTML = html;
-  document.getElementById("vipBox").appendChild(card);
+  const slot = document.getElementById("vipStatusSlot");
+  if (!slot) return;
+  slot.innerHTML = `<div id="vipRequestCard" style="max-width:520px;margin:0 auto 20px;">${html}</div>`;
 }
 
 function clearStoredCode() {
