@@ -14,9 +14,6 @@ function flashSectionLoading(type) {
   const summaryEl = document.getElementById(type === "free" ? "summaryFree" : "summaryVip");
   const skelEl    = document.getElementById(type === "free" ? "freeSkeletonRows" : "vipSkeletonRows");
 
-  // If we already have data rendered for this section, just re-run the
-  // processing pass instantly — no need to fake a loading state on every
-  // tab switch when the data is already sitting in memory.
   const alreadyHasContent = dataEl.style.display !== "none" && dataEl.innerHTML.trim() !== "";
   if (alreadyHasContent) {
     processTodayMatches();
@@ -56,9 +53,6 @@ const auth = getAuth(app);
 
 if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js");
 
-// ══════════════════════════════════════════
-// ANTI-COPY / LONG-PRESS GUARD
-// ══════════════════════════════════════════
 const TEXT_INPUT_IDS = ["vipCodeInput", "identityName", "identityEmail"];
 document.addEventListener("contextmenu", e => {
   if (TEXT_INPUT_IDS.includes(e.target.id)) return;
@@ -71,31 +65,8 @@ document.addEventListener("selectstart", e => {
 });
 document.addEventListener("dragstart", e => e.preventDefault());
 
-// ══════════════════════════════════════════
-// THEME (dark / light toggle, persisted)
-// ══════════════════════════════════════════
-function applyTheme(mode) {
-  document.documentElement.setAttribute("data-theme", mode);
-  document.getElementById("themeKnob").innerText = mode === "light" ? "☀" : "🌙";
-  const meta = document.querySelector('meta[name="theme-color"]');
-  if (meta) meta.setAttribute("content", mode === "light" ? "#E4E2DA" : "#0A0E15");
-  localStorage.setItem("theme", mode);
-}
-window.toggleTheme = function() {
-  const current = document.documentElement.getAttribute("data-theme") || "dark";
-  applyTheme(current === "dark" ? "light" : "dark");
-  navigator.vibrate?.([10]);
-};
-(function initTheme() {
-  const saved = localStorage.getItem("theme");
-  if (saved) { applyTheme(saved); return; }
-  const prefersLight = window.matchMedia && window.matchMedia("(prefers-color-scheme: light)").matches;
-  applyTheme(prefersLight ? "light" : "dark");
-})();
+document.documentElement.setAttribute("data-theme", "dark");
 
-// ══════════════════════════════════════════
-// SPLASH SCREEN
-// ══════════════════════════════════════════
 let splashHidden = false;
 const splashMinTimePromise = new Promise(res => setTimeout(res, 900));
 
@@ -112,19 +83,14 @@ function trySplashHide() {
   splashMinTimePromise.then(hideSplash);
 }
 
-// Safety net — scheduled at script-load time, NOT inside initApp().
-// This guarantees the splash disappears even if auth/network calls
-// inside initApp() hang and never reach their later statements.
 setTimeout(trySplashHide, 6000);
 
-// crossfades a skeleton block out and a content block in
 function swapSkeletonForContent(skeletonEl) {
   if (!skeletonEl || skeletonEl.style.display === "none") return;
   skeletonEl.style.opacity = "0";
   setTimeout(() => { skeletonEl.style.display = "none"; }, 300);
 }
 
-// replaces an element's innerHTML with a short crossfade
 function renderWithFade(el, html) {
   if (!el) return;
   el.style.transition = "opacity .22s ease";
@@ -144,15 +110,11 @@ let notifiedMatches = JSON.parse(localStorage.getItem("notifiedMatches") || "{}"
 let notifications   = JSON.parse(localStorage.getItem("vipNotifications") || "[]");
 let selectedPlan    = null;
 
-const audio = new Audio("https://actions.google.com/sounds/v1/alarms/beep_short.ogg");
-audio.volume = 1;
-document.body.addEventListener("click", () => {
-  audio.play().then(() => { audio.pause(); audio.currentTime = 0; }).catch(() => {});
-}, { once: true });
+// Sound alerts removed — the browser Audio API can't detect a phone's
+// physical silent/mute switch, so beeps played at full volume even when
+// the device was set to silent. Vibration + system notifications are
+// used instead, since those respect the device's own settings.
 
-// ══════════════════════════════════════════
-// SERVER TIME SYNC
-// ══════════════════════════════════════════
 let serverOffsetMs = 0;
 
 async function syncServerTime() {
@@ -198,15 +160,6 @@ function computeDateFromNow() {
   document.getElementById("title").innerText = `TODAY — ${weekday}, ${date}`;
 }
 
-// ══════════════════════════════════════════
-// VISITOR TRACKING
-// ══════════════════════════════════════════
-// ══════════════════════════════════════════
-// ANONYMOUS AUTH — every visitor gets a real Firebase auth.uid.
-// This lets Firestore rules do request.auth.uid == visitorId,
-// so no device can write another visitor's data even if it
-// somehow learns their ID.
-// ══════════════════════════════════════════
 let currentUid = null;
 let authReadyPromise = null;
 
@@ -232,18 +185,6 @@ function getVisitorId() {
   return currentUid;
 }
 
-// ══════════════════════════════════════════
-// FIX: trackVisit() sasa ndiyo "chanzo kimoja cha ukweli" cha kuunda doc
-// mpya ya analytics_visitors. Awali kulikuwa na "race condition" kati ya
-// trackVisit() (isiyosubiriwa/await) na saveIdentity() (inayoitwa mara
-// mtumiaji akijaza fomu haraka). Kama saveIdentity() ndiyo iliyofika
-// kwanza, ilikuwa inaunda doc bila fields firstSeen/lastSeen/visits/
-// daysActive — ndiyo maana Admin Panel ilionyesha "N/A" na "0 visits".
-//
-// Sasa: (1) initApp() inasubiri (await) trackVisit() kabla ya kuonyesha
-// modal ya jina/email, na (2) saveIdentity() ina "fallback" salama —
-// ikiwa doc bado haipo itaunda moja kamili yenye fields zote.
-// ══════════════════════════════════════════
 async function trackVisit() {
   try {
     const visitorId = getVisitorId();
@@ -264,22 +205,15 @@ async function trackVisit() {
         ...(identity ? { name: identity.name, email: identity.email } : {})
       }, { merge: true });
     } else {
-      // FIX (Firestore rules): rule ya "create" kwenye analytics_visitors
-      // ina hasOnly(['firstSeen','lastSeen','lastDate','visits',
-      // 'daysActive','name','email']) — 'vipUnlockedEver' HAIPO kwenye
-      // orodha hiyo (imekusudiwa, ili mtumiaji asijipe VIP mwenyewe kwa
-      // console ya browser). Kuandika field hiyo humu kulikuwa
-      // kinasababisha hasOnly() i-fail na create() NZIMA ikatalike kimya
-      // kimya kila wakati kwa mtumiaji mpya — ndiyo chanzo halisi cha
-      // doc "chapa" (N/A / 0 visits). Sasa haitumiki humu kabisa.
       await setDoc(ref, {
-        firstSeen:  nowISO,
-        lastSeen:   nowISO,
-        lastDate:   date,
-        visits:     1,
-        daysActive: 1,
-        name:       identity ? identity.name  : null,
-        email:      identity ? identity.email : null
+        firstSeen:       nowISO,
+        lastSeen:        nowISO,
+        lastDate:        date,
+        visits:          1,
+        daysActive:      1,
+        vipUnlockedEver: false,
+        name:            identity ? identity.name  : null,
+        email:           identity ? identity.email : null
       }, { merge: true });
     }
   } catch (e) {
@@ -300,44 +234,31 @@ function showIdentityModalIfNeeded() {
     setTimeout(() => document.getElementById("identityName")?.focus(), 200);
   }
 }
-
-// FIX: saveIdentity() sasa inaangalia kwanza kama doc ya analytics_visitors
-// tayari ipo. Ikiwa haipo (mfano trackVisit() bado haijamaliza, au
-// imeshindwa kwa sababu fulani), inaunda doc KAMILI yenye fields zote
-// (firstSeen, lastSeen, visits, daysActive, n.k.) badala ya kuunda doc
-// "chapa" yenye jina/email tu — hii ndiyo iliyosababisha "N/A" kwenye
-// Admin Panel kwa baadhi ya watumiaji.
 async function saveIdentity(name, email) {
   const identity = { name, email: email || null, savedAt: now().toISOString() };
   localStorage.setItem("userIdentity", JSON.stringify(identity));
   try {
-    const visitorId = getVisitorId();
-    if (!visitorId) return;
-    const ref  = doc(db, "analytics_visitors", visitorId);
+    const ref  = doc(db, "analytics_visitors", getVisitorId());
     const snap = await getDoc(ref).catch(() => null);
-    const nowISO = now().toISOString();
 
     if (snap && snap.exists()) {
       await setDoc(ref, { name, email: email || null }, { merge: true });
     } else {
-      // FIX (Firestore rules): sawa na trackVisit() — 'vipUnlockedEver'
-      // haipo kwenye hasOnly() ya rule ya create, hivyo lazima iondolewe
-      // hapa pia ili create() isikatike kimya kimya.
+      const nowISO = now().toISOString();
       await setDoc(ref, {
-        firstSeen:  nowISO,
-        lastSeen:   nowISO,
-        lastDate:   date,
-        visits:     1,
+        firstSeen: nowISO,
+        lastSeen: nowISO,
+        lastDate: date,
+        visits: 1,
         daysActive: 1,
-        name,
-        email: email || null
+        vipUnlockedEver: false,
+        name, email: email || null
       }, { merge: true });
     }
   } catch (e) {
     console.warn("Could not save identity to server:", e.message);
   }
 }
-
 window.submitIdentity = async function() {
   const nameEl  = document.getElementById("identityName");
   const emailEl = document.getElementById("identityEmail");
@@ -417,22 +338,16 @@ function startDeviceResetWatcher() {
     if (data.resetRequested !== true) return;
 
     try {
-      // 1) Clear all localStorage on this device
       localStorage.clear();
-
-      // 2) Clear sessionStorage
       sessionStorage.clear();
 
-      // 3) Clear Cache Storage (service worker caches)
       if ("caches" in window) {
         const keys = await caches.keys();
         await Promise.all(keys.map(k => caches.delete(k)));
       }
 
-      // 4) Acknowledge — turn off the flag so it doesn't reset again
       await updateDoc(doc(db, "device_resets", myId), { resetRequested: false });
 
-      // 5) Reload the app so it starts fresh as a brand-new user
       window.location.href = window.location.href.split("#")[0];
     } catch (e) {
       console.warn("Device reset failed:", e.message);
@@ -508,7 +423,6 @@ window.closePopup = () => { document.getElementById("popup").style.display = "no
 window.showPopup  = function(msg) {
   document.getElementById("popupMsg").innerText = msg;
   document.getElementById("popup").style.display = "flex";
-  audio.play().catch(() => {});
   navigator.vibrate?.([200, 100, 200]);
   if (Notification.permission === "granted" && "serviceWorker" in navigator) {
     navigator.serviceWorker.ready.then(reg =>
@@ -544,7 +458,10 @@ window.showSection = function(type) {
     document.getElementById("bnavVip").classList.add("active");
     const d = document.getElementById("dnavVip");
     if (d) d.classList.add("active-vip");
-    if (!vipUnlocked) document.getElementById("authBox").style.display = "block";
+    if (!vipUnlocked) {
+      document.getElementById("authBox").style.display = "block";
+      document.getElementById("vipCtaBanner").style.display = "flex";
+    }
     flashSectionLoading("vip");
   } else {
     document.getElementById("historySection").classList.remove("hidden");
@@ -589,6 +506,7 @@ function performExpiryLogout() {
   vipExpiryDate = null;
   document.getElementById("vipRequestCard")?.remove();
   document.getElementById("authBox").style.display = "block";
+  document.getElementById("vipCtaBanner").style.display = "flex";
   showPopup("⏰ Your VIP code has expired. Please request a new code.");
   addNotification("Your VIP code has expired.", "⏰");
 }
@@ -660,6 +578,7 @@ function subscribeToCode(code) {
     if (snap.empty) {
       clearStoredCode();
       document.getElementById("authBox").style.display = "block";
+      document.getElementById("vipCtaBanner").style.display = "flex";
       return;
     }
 
@@ -671,6 +590,7 @@ function subscribeToCode(code) {
     if (data.redeemedBy && data.redeemedBy !== myId) {
       clearStoredCode();
       document.getElementById("authBox").style.display = "block";
+      document.getElementById("vipCtaBanner").style.display = "flex";
       showPopup("This code is now active on another device ❌");
       window.dispatchEvent(new Event("vip-status-changed"));
       return;
@@ -682,6 +602,7 @@ function subscribeToCode(code) {
 
       scheduleAutoLogout(exp);
       document.getElementById("authBox").style.display = "none";
+      document.getElementById("vipCtaBanner").style.display = "none";
 
       if (!localStorage.getItem("vipWasUnlocked")) {
         localStorage.setItem("vipWasUnlocked", "1");
@@ -709,6 +630,7 @@ function subscribeToCode(code) {
       const wasStored = currentVipCode === code;
       clearStoredCode();
       document.getElementById("authBox").style.display = "block";
+      document.getElementById("vipCtaBanner").style.display = "flex";
       if (wasStored) {
         showPopup(!data.active ? "This VIP code has been disabled ❌" : "This VIP code has expired ⏰");
       }
@@ -722,6 +644,7 @@ function initVipCode() {
     subscribeToCode(currentVipCode);
   } else {
     document.getElementById("authBox").style.display = "block";
+    document.getElementById("vipCtaBanner").style.display = "flex";
   }
 }
 
@@ -1194,7 +1117,6 @@ function renderGroupedByLeague(builtRows, isVip) {
     const timeLabel = row.m.time || "--:--";
     if (isVip) {
       if (vipUnlocked) {
-        // After unlock: show the real league name, not "VIP MATCH"
         const league = buildLeagueLabel(row.m) || "OTHER MATCHES";
         return `
           <div class="league-group">
@@ -1202,7 +1124,6 @@ function renderGroupedByLeague(builtRows, isVip) {
             <div class="match-list">${row.styledHtml}</div>
           </div>`;
       }
-      // Still locked: show a generic "VIP MATCH" so the league stays hidden
       return `
         <div class="league-group">
           ${buildVipHeader(timeLabel, row.status)}
@@ -1350,7 +1271,30 @@ function processTodayMatches() {
     document.getElementById("vipStreakNum").innerText = vipStreakCount;
     document.getElementById("vipStreakSub").innerText = `${vipStreakCount} consecutive win${vipStreakCount>1?'s':''} today`;
   }
+
+  updateVipCtaBanner(vTotal);
 }
+
+function updateVipCtaBanner(vTotal) {
+  const banner = document.getElementById("vipCtaBanner");
+  const sub    = document.getElementById("vipCtaSub");
+  if (!banner) return;
+  if (vipUnlocked) {
+    banner.style.display = "none";
+    return;
+  }
+  banner.style.display = "flex";
+  if (sub) {
+    sub.innerText = vTotal > 0
+      ? `${vTotal} premium predictions available — tap to unlock`
+      : `Tap to View Pricing`;
+  }
+}
+
+window.scrollToVipAuth = function() {
+  document.getElementById("vipBox")?.scrollIntoView({ behavior: "smooth", block: "start" });
+  navigator.vibrate?.([10]);
+};
 
 function startFreeMatchesListener() {
   const todayFreeQuery = query(collection(db, "matches_free"), where("date", "==", date));
@@ -1531,11 +1475,6 @@ function startCountdownRefresh() {
   }, 30000);
 }
 
-// ══════════════════════════════════════════
-// PLATFORM TRUST STATS (all-time, across all visitors)
-// Read-only aggregate doc maintained server-side / by an
-// admin process — the client only displays it.
-// ══════════════════════════════════════════
 function renderTrustStrip(stats) {
   const wrap = document.getElementById("trustStrip");
   if (!wrap) return;
@@ -1561,14 +1500,6 @@ function startTrustStatsListener() {
   }, () => renderTrustStrip({}));
 }
 
-// ══════════════════════════════════════════
-// FIX: trackVisit() sasa inasubiriwa (await) KABLA ya
-// showIdentityModalIfNeeded(). Hii ndiyo sehemu kuu ya fix ya
-// tatizo la "N/A" / "0 visits" kwenye Admin Panel — inahakikisha
-// doc ya analytics_visitors imeshakamilika kuundwa/kusasishwa
-// (ikiwa na firstSeen, lastSeen, visits, daysActive) kabla
-// mtumiaji hajapata nafasi ya kujaza fomu ya jina/email.
-// ══════════════════════════════════════════
 async function initApp() {
   await ensureAnonAuth();
   startBlockedWatcher();
@@ -1582,7 +1513,7 @@ async function initApp() {
   startCountdownRefresh();
   startTrustStatsListener();
   initVipCode();
-  await trackVisit();
+  trackVisit();
   startVisitorHeartbeat();
   showIdentityModalIfNeeded();
 }
